@@ -2,14 +2,19 @@
 #
 # Get latest from https://github.com/github/gitignore/blob/master/Unity.gitignore
 #
-/[Ll]ibrary/
-/[Tt]emp/
-/[Oo]bj/
-/[Bb]uild/
-/[Bb]uilds/
-/[Ll]ogs/
-/[Mm]emoryCaptures/
-
+IA1_Final_MarceloLuna/[Ll]ibrary/
+IA1_Final_MarceloLuna/[Tt]emp/
+IA1_Final_MarceloLuna/[Oo]bj/
+IA1_Final_MarceloLuna/[Bb]uild/
+IA1_Final_MarceloLuna/[Bb]uilds/
+IA1_Final_MarceloLuna/[Ll]ogs/
+IA1_Final_MarceloLuna/[Mm]emoryCaptures/
+IA1_Final_MarceloLuna/Assembly-CSharp-Editor.csproj
+IA1_Final_MarceloLuna/Assembly-CSharp.csproj
+IA1_Final_MarceloLuna/Packages/manifest.json
+IA1_Final_MarceloLuna/Packages/packages-lock.json
+IA1_Final_MarceloLuna/ProjectSettings/ProjectVersion.txt
+IA1_Final_MarceloLuna/.vsconfig
 # Asset meta data should only be ignored when the corresponding asset is also ignored
 !/[Aa]ssets/**/*.meta
 
