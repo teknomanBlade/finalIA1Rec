@@ -15,12 +15,16 @@ public class LeaderNorthController : IController
 
     public void OnUpdate()
     {
+        #region User Movement Leader
         if (Input.GetMouseButtonDown(0))
             _model.GetPositionInScene();
-            
-        _model.Arrive();
-        _model.Move();
 
+        if (_model.InSight()) 
+        {
+            _model.Arrive();
+            _model.Move();
+        }
+        #endregion
         _model.UpdateFSMLeaders();
     }
 

@@ -24,17 +24,6 @@ public class Node : MonoBehaviour
 
     private void OnMouseOver()
     {
-        if (Input.GetMouseButtonDown(0))
-            GameManager.instance.SetStartingNode(this);
-        if (Input.GetMouseButtonDown(1))
-            GameManager.instance.SetGoalNode(this);
-
-        if (Input.GetKey(KeyCode.UpArrow))
-            ChangeCost(cost + 1);
-        if (Input.GetKey(KeyCode.DownArrow))
-            ChangeCost(cost - 1);
-        if (Input.GetKey(KeyCode.R))
-            ChangeCost(0);
 
     }
 

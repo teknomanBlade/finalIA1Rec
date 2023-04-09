@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3587732154714808284}
   - component: {fileID: -2976404439790243719}
   - component: {fileID: 9143107362525295787}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: FollowerSouth
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -118,6 +118,10 @@ MonoBehaviour:
   NPCSLayer:
     serializedVersion: 2
     m_Bits: 0
+  FloorMask:
+    serializedVersion: 2
+    m_Bits: 0
+  TargetPosition: {x: 0, y: 0, z: 0}
 --- !u!114 &9143107362525295787
 MonoBehaviour:
   m_ObjectHideFlags: 0

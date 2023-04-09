@@ -8,11 +8,13 @@ public class LeaderNorthModel : BaseModel
 
     public float maxSpeed;
     public float maxForce;
+    public float offsetY;
     public Vector3 _velocity;
     // Start is called before the first frame update
     void Awake()
     {
         HP = 150.0f;
+        MaxHP = HP;
         Faction = "North";
         Rank = "Leader";
         Damage = 8.0f;
@@ -29,11 +31,15 @@ public class LeaderNorthModel : BaseModel
     {
         transform.position += _velocity * Time.deltaTime;
         transform.forward = _velocity;
+        transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
     }
 
     public void Arrive()
     {
         if (TargetPosition.Equals(Vector3.zero)) return;
+
+        //if (GameManager.instance.InSight(transform.position, TargetPosition))
+            //Debug.Log("ESTA A LA VISTA: " + GameManager.instance.InSight(transform.position, TargetPosition) + " - " + gameObject.name);
 
         Vector3 desired = (TargetPosition - transform.position).normalized;
         float dist = Vector3.Distance(transform.position, TargetPosition);
@@ -44,10 +50,8 @@ public class LeaderNorthModel : BaseModel
         }
 
         desired *= speed;
-
-
         Vector3 steering = Vector3.ClampMagnitude(desired - _velocity, maxForce);
-
+        
 
         ApplyForce(steering);
     }
@@ -56,4 +60,5 @@ public class LeaderNorthModel : BaseModel
     {
         _velocity += force;
     }
+    
 }

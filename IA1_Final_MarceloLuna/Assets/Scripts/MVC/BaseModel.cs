@@ -45,6 +45,12 @@ public class BaseModel : MonoBehaviour, IDamageTargetObservable
         get { return _hp; }
         set { _hp = value; }
     }
+    protected float _maxHp;
+    public float MaxHP
+    {
+        get { return _maxHp; }
+        set { _maxHp = value; }
+    }
     protected float _damage;
     public float Damage
     {
@@ -73,6 +79,7 @@ public class BaseModel : MonoBehaviour, IDamageTargetObservable
     public LayerMask NPCSLayer;
     public LayerMask FloorMask;
     public Vector3 TargetPosition;
+    public Node currentNode;
     public enum NPCInputs { ATTACK, FOLLOW, DIE, ESCAPE }
     protected EventFSM<NPCInputs> _mFSM_NPCs;
     public EventFSM<NPCInputs> FSM_NPCs
@@ -87,6 +94,44 @@ public class BaseModel : MonoBehaviour, IDamageTargetObservable
         get { return _mFSMLeaders; }
         set { _mFSMLeaders = value; }
     }
+    protected float _distanceToTarget;
+    public float DistanceToTarget
+    {
+        get { return _distanceToTarget; }
+        set { _distanceToTarget = value; }
+    }
+    protected float _angleToTarget;
+    public float AngleToTarget
+    {
+        get { return _angleToTarget; }
+        set { _angleToTarget = value; }
+    }
+    protected float _distanceThreshold;
+    public float DistanceThreshold
+    {
+        get { return _distanceThreshold; }
+        set { _distanceThreshold = value; }
+    }
+    protected float _attackDistanceThreshold;
+    public float AttackDistanceThreshold
+    {
+        get { return _attackDistanceThreshold; }
+        set { _attackDistanceThreshold = value; }
+    }
+    protected float _angleThreshold;
+    public float AngleThreshold
+    {
+        get { return _angleThreshold; }
+        set { _angleThreshold = value; }
+    }
+
+    protected Vector3 _dirToTarget;
+    public Vector3 DirToTarget
+    {
+        get { return _dirToTarget; }
+        set { _dirToTarget = value; }
+    }
+    public bool ObstaclesBetween;
     // Start is called before the first frame update
     void Start()
     {
@@ -155,6 +200,10 @@ public class BaseModel : MonoBehaviour, IDamageTargetObservable
         {
             TargetPosition = hitData.point;
         }
+    }
+    public bool InSight()
+    {
+        return GameManager.instance.InSight(transform.position, TargetPosition);
     }
     public void AddObserverDamageTarget(IDamageTargetObserver obs)
     {

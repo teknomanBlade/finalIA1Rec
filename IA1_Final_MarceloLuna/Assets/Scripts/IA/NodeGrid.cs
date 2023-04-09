@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class NodeGrid : MonoBehaviour
@@ -16,6 +17,7 @@ public class NodeGrid : MonoBehaviour
     {
         nodePrefab = Resources.Load<Node>("Node").gameObject;
         GenerateGrid();
+        GameManager.instance.AllNodes = FindObjectsOfType<Node>().ToList();
     }
 
     // Update is called once per frame

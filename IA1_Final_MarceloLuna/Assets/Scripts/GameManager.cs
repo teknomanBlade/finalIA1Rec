@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
-
+    public List<Node> AllNodes;
     private Node _startingNode;
     private Node _goalNode;
     public AStar aStar;

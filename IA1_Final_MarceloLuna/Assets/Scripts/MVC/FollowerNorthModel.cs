@@ -8,10 +8,10 @@ public class FollowerNorthModel : BaseModel
     void Awake()
     {
         HP = 100.0f;
+        MaxHP = HP;
         Faction = "North";
         Rank = "Follower";
         Damage = 5.0f;
-        Speed = 4f;
         FollowerNorthView = GetComponent<FollowerNorthView>();
         Controller = new FollowerNorthController(this, FollowerNorthView);
     }
