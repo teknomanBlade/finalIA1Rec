@@ -39,6 +39,12 @@ public class BaseModel : MonoBehaviour, IDamageTargetObservable
     private float _tick;
     private float _attackRate;
     private float _count;
+    private float _distanceNodeThreshold;
+    public float DistanceNodeThreshold
+    {
+        get { return _distanceNodeThreshold; }
+        set { _distanceNodeThreshold = value; }
+    }
     protected float _hp;
     public float HP
     {
@@ -80,6 +86,10 @@ public class BaseModel : MonoBehaviour, IDamageTargetObservable
     public LayerMask FloorMask;
     public Vector3 TargetPosition;
     public Node currentNode;
+    public LeaderInputs CurrentLeaderState;
+    public NPCInputs CurrentNPCState;
+    private IBehaviour currentBehaviour;
+    private IBehaviour previousMovementBehaviour;
     public enum NPCInputs { ATTACK, FOLLOW, DIE, ESCAPE }
     protected EventFSM<NPCInputs> _mFSM_NPCs;
     public EventFSM<NPCInputs> FSM_NPCs
@@ -175,7 +185,7 @@ public class BaseModel : MonoBehaviour, IDamageTargetObservable
         else 
         {
             Debug.Log("LIFE: " + HP);
-            HP -= damage;
+            HP -= Mathf.Clamp(HP - damage, 0.0f, MaxHP);
         }
 
     }
@@ -204,6 +214,18 @@ public class BaseModel : MonoBehaviour, IDamageTargetObservable
     public bool InSight()
     {
         return GameManager.instance.InSight(transform.position, TargetPosition);
+    }
+    public void GetNodeByLesserDistance()
+    {
+        GameManager.instance.AllNodes.ForEach(x => {
+            //Debug.Log("DISTANCE TO NODE " + x.name + ": " + Vector3.Distance(transform.position, x.transform.position)); 
+            if (!x.isBlocked && Vector3.Distance(transform.position, x.transform.position) <= DistanceNodeThreshold)
+            {
+                //Debug.Log("ENTRA EN IF DISTANCIA?");
+                currentNode = x;
+                Debug.Log("CURRENT NODE: " + currentNode.name);
+            }
+        });
     }
     public void AddObserverDamageTarget(IDamageTargetObserver obs)
     {

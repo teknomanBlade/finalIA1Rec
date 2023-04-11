@@ -1901,6 +1901,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5c256fa8244c864fab26991b93b1949, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  AllNodes: []
   grid: {fileID: 1762290472}
   wallMask:
     serializedVersion: 2
