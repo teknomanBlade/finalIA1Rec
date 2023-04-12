@@ -15,16 +15,8 @@ public class LeaderSouthController : IController
 
     public void OnUpdate()
     {
-        #region User Movement Leader
         if (Input.GetMouseButtonDown(1))
             _model.GetPositionInScene();
-
-        if (_model.InSight())
-        {
-            _model.Arrive();
-            _model.Move();
-        }
-        #endregion
 
         _model.UpdateFSMLeaders();
     }

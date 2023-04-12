@@ -40,6 +40,7 @@ public class BaseModel : MonoBehaviour, IDamageTargetObservable
     private float _attackRate;
     private float _count;
     private float _distanceNodeThreshold;
+    
     public float DistanceNodeThreshold
     {
         get { return _distanceNodeThreshold; }
@@ -88,8 +89,13 @@ public class BaseModel : MonoBehaviour, IDamageTargetObservable
     public Node currentNode;
     public LeaderInputs CurrentLeaderState;
     public NPCInputs CurrentNPCState;
-    private IBehaviour currentBehaviour;
-    private IBehaviour previousMovementBehaviour;
+    protected IBehaviour currentBehaviour;
+    protected IBehaviour previousMovementBehaviour;
+    public float arriveRadius;
+    public float maxSpeed;
+    public float maxForce;
+    public float offsetY;
+    public Vector3 _velocity;
     public enum NPCInputs { ATTACK, FOLLOW, DIE, ESCAPE }
     protected EventFSM<NPCInputs> _mFSM_NPCs;
     public EventFSM<NPCInputs> FSM_NPCs

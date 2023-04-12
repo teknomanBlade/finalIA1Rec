@@ -4,12 +4,7 @@ using UnityEngine;
 
 public class LeaderSouthModel : BaseModel
 {
-    public float arriveRadius;
-
-    public float maxSpeed;
-    public float maxForce;
-    public float offsetY;
-    public Vector3 _velocity;
+    
     // Start is called before the first frame update
     void Awake()
     {
@@ -22,7 +17,9 @@ public class LeaderSouthModel : BaseModel
         LeaderSouthView = GetComponent<LeaderSouthView>();
         Controller = new LeaderSouthController(this, LeaderSouthView);
         #region EventFSM
-        
+        previousMovementBehaviour = new MoveToPoint(this);
+        currentBehaviour = new MoveToPoint(this);
+
         var moveToPoint = new State<LeaderInputs>("MOVE TO POINT");
         var attack = new State<LeaderInputs>("ATTACK");
         var escape = new State<LeaderInputs>("ESCAPE");
@@ -50,15 +47,15 @@ public class LeaderSouthModel : BaseModel
 
         moveToPoint.OnEnter += x =>
         {
-            //CurrentState = LeaderInputs.IDLE;
+            CurrentLeaderState = LeaderInputs.MOVE_TO_POINT;
             //OnStateChanged((int)CurrentState);
-            //currentBehaviour = new Idle(rb);
+            currentBehaviour = previousMovementBehaviour;
             Debug.Log("START MOVE TO POINT...");
         };
 
         moveToPoint.OnUpdate += () =>
         {
-            //currentBehaviour.ExecuteState();
+            currentBehaviour.ExecuteState();
         };
 
         moveToPoint.OnExit -= x =>
@@ -174,37 +171,5 @@ public class LeaderSouthModel : BaseModel
     }
 
 
-    public void Move()
-    {
-        GetNodeByLesserDistance();
-        transform.position += _velocity * Time.deltaTime;
-        transform.forward = _velocity;
-        transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
-    }
-
-    public void Arrive()
-    {
-        if (TargetPosition.Equals(Vector3.zero)) return;
-
-        //if (GameManager.instance.InSight(transform.position, TargetPosition))
-            //Debug.Log("ESTA A LA VISTA: " + GameManager.instance.InSight(transform.position, TargetPosition) + " - " + gameObject.name);
-
-        Vector3 desired = (TargetPosition - transform.position).normalized;
-        float dist = Vector3.Distance(transform.position, TargetPosition);
-        float speed = maxSpeed;
-        if (dist <= arriveRadius)
-        {
-            speed = maxSpeed * (dist / arriveRadius);
-        }
-
-        desired *= speed;
-        Vector3 steering = Vector3.ClampMagnitude(desired - _velocity, maxForce);
-
-        ApplyForce(steering);
-    }
-
-    void ApplyForce(Vector3 force)
-    {
-        _velocity += force;
-    }
+    
 }

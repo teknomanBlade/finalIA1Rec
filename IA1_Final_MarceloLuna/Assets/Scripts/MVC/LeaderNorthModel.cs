@@ -4,12 +4,7 @@ using UnityEngine;
 
 public class LeaderNorthModel : BaseModel
 {
-    public float arriveRadius;
-
-    public float maxSpeed;
-    public float maxForce;
-    public float offsetY;
-    public Vector3 _velocity;
+    
     // Start is called before the first frame update
     void Awake()
     {
