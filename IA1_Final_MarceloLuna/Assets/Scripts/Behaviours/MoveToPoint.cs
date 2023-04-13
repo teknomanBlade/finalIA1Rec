@@ -14,7 +14,7 @@ public class MoveToPoint : IBehaviour
     public void ExecuteState()
     {
         #region User Movement Leader
-        
+        _model.GetNodeFinalByLesserDistance(_model.TargetPosition);
         if (_model.InSight())
         {
             Arrive();
@@ -34,7 +34,6 @@ public class MoveToPoint : IBehaviour
     public void Arrive()
     {
         if (_model.TargetPosition.Equals(Vector3.zero)) return;
-
         //if (GameManager.instance.InSight(transform.position, TargetPosition))
         //Debug.Log("ESTA A LA VISTA: " + GameManager.instance.InSight(transform.position, TargetPosition) + " - " + gameObject.name);
 

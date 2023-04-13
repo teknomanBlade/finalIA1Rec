@@ -40,11 +40,18 @@ public class BaseModel : MonoBehaviour, IDamageTargetObservable
     private float _attackRate;
     private float _count;
     private float _distanceNodeThreshold;
-    
+
     public float DistanceNodeThreshold
     {
         get { return _distanceNodeThreshold; }
         set { _distanceNodeThreshold = value; }
+    }
+    private float _distanceNodeFinalThreshold;
+
+    public float DistanceNodeFinalThreshold
+    {
+        get { return _distanceNodeFinalThreshold; }
+        set { _distanceNodeFinalThreshold = value; }
     }
     protected float _hp;
     public float HP
@@ -87,8 +94,19 @@ public class BaseModel : MonoBehaviour, IDamageTargetObservable
     public LayerMask FloorMask;
     public Vector3 TargetPosition;
     public Node currentNode;
-    public LeaderInputs CurrentLeaderState;
-    public NPCInputs CurrentNPCState;
+    public Node finalNode;
+    private LeaderInputs _currentLeaderState;
+    public LeaderInputs CurrentLeaderState
+    {
+        get { return _currentLeaderState; }
+        set { _currentLeaderState = value; }
+    }
+    private NPCInputs _currentNPCState;
+    public NPCInputs CurrentNPCState
+    {
+        get { return _currentNPCState; }
+        set { _currentNPCState = value; }
+    }
     protected IBehaviour currentBehaviour;
     protected IBehaviour previousMovementBehaviour;
     public float arriveRadius;
@@ -166,7 +184,7 @@ public class BaseModel : MonoBehaviour, IDamageTargetObservable
 
     public void UpdateFSMLeaders()
     {
-        //_mFSMLeaders.Update();
+        _mFSMLeaders.Update();
     }
 
     public void TakeDamage(float damage)
@@ -230,6 +248,20 @@ public class BaseModel : MonoBehaviour, IDamageTargetObservable
                 //Debug.Log("ENTRA EN IF DISTANCIA?");
                 currentNode = x;
                 Debug.Log("CURRENT NODE: " + currentNode.name);
+            }
+        });
+    }
+    public void GetNodeFinalByLesserDistance(Vector3 position)
+    {
+        if (position.Equals(Vector3.zero)) return;
+
+        GameManager.instance.AllNodes.ForEach(x => {
+            //Debug.Log("DISTANCE TO NODE " + x.name + ": " + Vector3.Distance(transform.position, x.transform.position)); 
+            if (!x.isBlocked && Vector3.Distance(position, x.transform.position) <= DistanceNodeFinalThreshold)
+            {
+                //Debug.Log("ENTRA EN IF DISTANCIA?");
+                finalNode = x;
+                Debug.Log("FINAL NODE: " + finalNode.name);
             }
         });
     }

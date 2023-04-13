@@ -14,6 +14,7 @@ public class LeaderSouthModel : BaseModel
         Rank = "Leader";
         Damage = 8.0f;
         DistanceNodeThreshold = 0.25f;
+        DistanceNodeFinalThreshold = 0.4f;
         LeaderSouthView = GetComponent<LeaderSouthView>();
         Controller = new LeaderSouthController(this, LeaderSouthView);
         #region EventFSM
