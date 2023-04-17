@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3769753508625879408}
   - component: {fileID: -438880058158040247}
   - component: {fileID: 5129041724351529336}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: LeaderNorth
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -123,14 +123,14 @@ MonoBehaviour:
     m_Bits: 128
   TargetPosition: {x: 0, y: 0, z: 0}
   currentNode: {fileID: 0}
-  CurrentLeaderState: 1
-  CurrentNPCState: 1
-  ObstaclesBetween: 0
+  finalNode: {fileID: 0}
   arriveRadius: 3.5
   maxSpeed: 3
   maxForce: 4
   offsetY: 0.2012
   _velocity: {x: 0, y: 0, z: 0}
+  ObstaclesBetween: 0
+  npcs: []
 --- !u!114 &5129041724351529336
 MonoBehaviour:
   m_ObjectHideFlags: 0

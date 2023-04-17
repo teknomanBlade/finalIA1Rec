@@ -117,11 +117,20 @@ MonoBehaviour:
     m_Bits: 64
   NPCSLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 256
   FloorMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 128
   TargetPosition: {x: 0, y: 0, z: 0}
+  currentNode: {fileID: 0}
+  finalNode: {fileID: 0}
+  arriveRadius: 0
+  maxSpeed: 0
+  maxForce: 0
+  offsetY: 0
+  _velocity: {x: 0, y: 0, z: 0}
+  ObstaclesBetween: 0
+  npcs: []
 --- !u!114 &-3047957732853841297
 MonoBehaviour:
   m_ObjectHideFlags: 0

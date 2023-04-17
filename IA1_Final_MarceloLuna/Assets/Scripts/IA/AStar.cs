@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AStar
 {
-    public List<Node> ConstructPath(Node startingNode, Node goalNode)
+    protected List<Node> ConstructPath(Node startingNode, Node goalNode)
     {
         if (!startingNode || !goalNode) return null;
 

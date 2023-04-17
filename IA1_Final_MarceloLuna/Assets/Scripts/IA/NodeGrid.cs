@@ -13,7 +13,7 @@ public class NodeGrid : MonoBehaviour
     public float offset = 1;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         nodePrefab = Resources.Load<Node>("Node").gameObject;
         GenerateGrid();

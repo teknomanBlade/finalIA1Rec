@@ -1,6 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class BaseModel : MonoBehaviour, IDamageTargetObservable
@@ -166,10 +166,16 @@ public class BaseModel : MonoBehaviour, IDamageTargetObservable
         set { _dirToTarget = value; }
     }
     public bool ObstaclesBetween;
+    public BaseModel[] npcs;
     // Start is called before the first frame update
     void Start()
     {
-
+        npcs = FindObjectsOfType<BaseModel>();
+        AngleThreshold = 60f;
+        DistanceThreshold = 0.9f;
+        DistanceNodeThreshold = 0.4f;
+        DistanceNodeFinalThreshold = 0.4f;
+        GetNodeByLesserDistance();
     }
 
     // Update is called once per frame
@@ -235,6 +241,11 @@ public class BaseModel : MonoBehaviour, IDamageTargetObservable
             TargetPosition = hitData.point;
         }
     }
+
+    public List<Node> GetPath(Node initial, Node final) 
+    {
+        return GameManager.instance.thetaStar.GetPath(initial, final);
+    }
     public bool InSight()
     {
         return GameManager.instance.InSight(transform.position, TargetPosition);
@@ -247,7 +258,7 @@ public class BaseModel : MonoBehaviour, IDamageTargetObservable
             {
                 //Debug.Log("ENTRA EN IF DISTANCIA?");
                 currentNode = x;
-                Debug.Log("CURRENT NODE: " + currentNode.name);
+                //Debug.Log("CURRENT NODE: " + currentNode.name);
             }
         });
     }
@@ -261,7 +272,7 @@ public class BaseModel : MonoBehaviour, IDamageTargetObservable
             {
                 //Debug.Log("ENTRA EN IF DISTANCIA?");
                 finalNode = x;
-                Debug.Log("FINAL NODE: " + finalNode.name);
+                //Debug.Log("FINAL NODE: " + finalNode.name);
             }
         });
     }

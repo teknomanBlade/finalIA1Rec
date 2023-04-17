@@ -14,6 +14,7 @@ public class FollowerSouthModel : BaseModel
         Damage = 5.0f;
         FollowerSouthView = GetComponent<FollowerSouthView>();
         Controller = new FollowerSouthController(this, FollowerSouthView);
+        
         #region EventFSM
 
         var follow = new State<NPCInputs>("FOLLOW");
