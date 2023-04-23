@@ -13,6 +13,7 @@ public class LeaderNorthModel : BaseModel
         Faction = "North";
         Rank = "Leader";
         Damage = 8.0f;
+        AttackDistanceThreshold = 1.5f;
         LeaderNorthView = GetComponent<LeaderNorthView>();
         Controller = new LeaderNorthController(this, LeaderNorthView);
         #region EventFSM

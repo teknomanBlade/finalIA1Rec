@@ -13,12 +13,18 @@ public class LeaderSouthModel : BaseModel
         Faction = "South";
         Rank = "Leader";
         Damage = 8.0f;
+        AttackDistanceThreshold = 1.5f;
         LeaderSouthView = GetComponent<LeaderSouthView>();
         Controller = new LeaderSouthController(this, LeaderSouthView);
         #region EventFSM
-        previousMovementBehaviour = new MoveToPoint(this);
-        currentBehaviour = new MoveToPoint(this);
-        
+        var moveToPointBehaviour = new MoveToPoint(this);
+        var attackBehaviour = new Attack(this);
+        moveToPointBehaviour.AddObserverSetteableTarget(attackBehaviour);
+        moveToPointBehaviour.AddObserverAttackTarget(this);
+        moveToPointBehaviour.AddObserverObstacleBetween(this);
+        previousMovementBehaviour = moveToPointBehaviour;
+        currentBehaviour = moveToPointBehaviour;
+
         var moveToPoint = new State<LeaderInputs>("MOVE TO POINT");
         var attack = new State<LeaderInputs>("ATTACK");
         var escape = new State<LeaderInputs>("ESCAPE");
@@ -66,7 +72,7 @@ public class LeaderSouthModel : BaseModel
         {
             CurrentLeaderState = LeaderInputs.ATTACK;
             //OnStateChanged((int)CurrentState);
-            currentBehaviour = new Attack(this);
+            currentBehaviour = attackBehaviour;
             Debug.Log("START ATTACK...");
         };
 

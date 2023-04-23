@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class BaseModel : MonoBehaviour, IDamageTargetObservable
+public class BaseModel : MonoBehaviour, IDamageTargetObservable, IObstacleBetweenObserver, IAttackTargetObserver
 {
     protected List<IDamageTargetObserver> _myObserversDamageTarget = new List<IDamageTargetObserver>();
     protected IController _controller;
@@ -292,5 +292,21 @@ public class BaseModel : MonoBehaviour, IDamageTargetObservable
     public void TriggerDamageTarget(string message, float damage)
     {
         _myObserversDamageTarget.ForEach(x => x.OnNotifyDamageTarget(message, damage));
+    }
+
+    public void OnNotifyObstacleBetween(string message)
+    {
+
+    }
+
+    public void OnNotifyAttackTarget(string message)
+    {
+        if (message.Equals("IsAttacking")) 
+        {
+            if (Rank.Equals("Leader"))
+                FSMLeaders.SendInput(LeaderInputs.ATTACK);
+            else
+                FSM_NPCs.SendInput(NPCInputs.ATTACK);
+        }
     }
 }

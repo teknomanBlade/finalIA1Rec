@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class MoveToPoint : IBehaviour
+public class MoveToPoint : IBehaviour, ISetteableTargetObservable, IObstacleBetweenObservable, IAttackTargetObservable
 {
     List<ISetteableTargetObserver> _myObserversSetteableTarget = new List<ISetteableTargetObserver>();
     List<IObstacleBetweenObserver> _myObserversObstacleBetween = new List<IObstacleBetweenObserver>();
@@ -168,7 +168,7 @@ public class MoveToPoint : IBehaviour
         _myObserversAttackTarget.Add(obs);
     }
 
-    public void RemoveObserverAttackingTarget(IAttackTargetObserver obs)
+    public void RemoveObserverAttackTarget(IAttackTargetObserver obs)
     {
         if (_myObserversAttackTarget.Contains(obs))
         {
