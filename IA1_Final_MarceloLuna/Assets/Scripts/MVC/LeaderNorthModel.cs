@@ -17,9 +17,12 @@ public class LeaderNorthModel : BaseModel
         LeaderNorthView = GetComponent<LeaderNorthView>();
         Controller = new LeaderNorthController(this, LeaderNorthView);
         #region EventFSM
-        previousMovementBehaviour = new MoveToPoint(this);
-        currentBehaviour = new MoveToPoint(this);
-        
+        var moveToPointBehaviour = new MoveToPoint(this);
+        var attackBehaviour = new Attack(this);
+        moveToPointBehaviour.AddObserverSetteableTarget(attackBehaviour);
+        previousMovementBehaviour = moveToPointBehaviour;
+        currentBehaviour = moveToPointBehaviour;
+
         var moveToPoint = new State<LeaderInputs>("MOVE TO POINT");
         var attack = new State<LeaderInputs>("ATTACK");
         var escape = new State<LeaderInputs>("ESCAPE");
@@ -67,7 +70,7 @@ public class LeaderNorthModel : BaseModel
         {
             CurrentLeaderState = LeaderInputs.ATTACK;
             //OnStateChanged((int)CurrentState);
-            currentBehaviour = new Attack(this);
+            currentBehaviour = attackBehaviour;
             Debug.Log("START ATTACK...");
         };
 
@@ -86,17 +89,18 @@ public class LeaderNorthModel : BaseModel
             //CurrentState = LeaderInputs.MOVE_TO_WAYPOINT;
             //OnStateChanged((int)CurrentState);
             //currentBehaviour = previousMovementBehaviour;
-            Debug.Log("START MOVE TO POINT...");
+            Debug.Log("START ESCAPE...");
         };
 
         escape.OnUpdate += () =>
         {
             //currentBehaviour.ExecuteState();
+            Debug.Log("EXECUTE ESCAPE...");
         };
 
         escape.OnExit -= x =>
         {
-            Debug.Log("END MOVE TO POINT...");
+            Debug.Log("END ESCAPE...");
         };
 
         die.OnEnter += x =>

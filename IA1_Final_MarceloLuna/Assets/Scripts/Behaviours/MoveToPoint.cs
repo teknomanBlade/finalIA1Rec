@@ -13,6 +13,8 @@ public class MoveToPoint : IBehaviour, ISetteableTargetObservable, IObstacleBetw
     public MoveToPoint(BaseModel model)
     {
         _model = model;
+        AddObserverAttackTarget(_model);
+        AddObserverObstacleBetween(_model);
     }
 
     public void ExecuteState()

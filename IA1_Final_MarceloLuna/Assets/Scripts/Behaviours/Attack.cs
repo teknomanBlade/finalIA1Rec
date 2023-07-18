@@ -6,6 +6,7 @@ public class Attack : IBehaviour, ISetteableTargetObserver
 {
     private BaseModel _model;
     public BaseModel _target { get; private set; }
+
     public Attack(BaseModel model)
     {
         _model = model;
@@ -18,12 +19,13 @@ public class Attack : IBehaviour, ISetteableTargetObserver
     public void AttackTarget(BaseModel target)
     {
         _model.DistanceToTarget = Vector3.Distance(_model.transform.position, target.transform.position);
-        //Debug.Log("DISTANCE TO TARGET: " + _viewModel.DistanceToTarget);
+        //Debug.Log("DISTANCE TO TARGET: " + _model.DistanceToTarget);
         _model.DirToTarget = (target.transform.position - _model.transform.position).normalized;
 
         if (_model.DistanceToTarget < _model.AttackDistanceThreshold)
         {
-            //target.TriggerDamagingTarget("IsDamaging", _model.Damage);
+            Debug.Log("IS DAMAGING? " + _model.name);
+            target.TakeDamage(_model.Damage);
             _model._velocity = Vector3.zero;
         }
         else

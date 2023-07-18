@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     public List<Node> AllNodes;
+    public List<Node> CornerNodes;
     private Node _startingNode;
     private Node _goalNode;
     public AStar aStar;
@@ -20,7 +21,6 @@ public class GameManager : MonoBehaviour
     {
         if (instance == null) instance = this;
         else Destroy(gameObject);
-
         aStar = new AStar();
         thetaStar = new ThetaStar();
     }

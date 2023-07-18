@@ -20,13 +20,32 @@ public class Node : MonoBehaviour
         _x = x;
         _y = y;
         ChangeCost(0);
+        AddCornersTag(x,y);
     }
 
     private void OnMouseOver()
     {
 
     }
-
+    void AddCornersTag(int x, int y) 
+    {
+        if (x == 1 && y == 1)
+        {
+            gameObject.tag = "Corner(1,1)";
+        }
+        else if (x == 1 && y == 23) 
+        {
+            gameObject.tag = "Corner(1,23)";
+        }
+        else if (x == 23 && y == 1)
+        {
+            gameObject.tag = "Corner(23,1)";
+        }
+        else if (x == 23 && y == 23)
+        {
+            gameObject.tag = "Corner(23,23)";
+        }
+    }
     void ChangeCost(int cst)
     {
         cost = Mathf.Clamp(cst, 0, 98);

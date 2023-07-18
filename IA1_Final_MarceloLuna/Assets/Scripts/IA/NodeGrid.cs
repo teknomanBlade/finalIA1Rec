@@ -18,6 +18,7 @@ public class NodeGrid : MonoBehaviour
         nodePrefab = Resources.Load<Node>("Node").gameObject;
         GenerateGrid();
         GameManager.instance.AllNodes = FindObjectsOfType<Node>().ToList();
+        GameManager.instance.CornerNodes = FindObjectsOfType<Node>().Where(x => x.tag.Contains("Corner")).ToList();
     }
 
     // Update is called once per frame

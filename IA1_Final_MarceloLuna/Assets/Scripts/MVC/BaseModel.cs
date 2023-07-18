@@ -1,11 +1,11 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class BaseModel : MonoBehaviour, IDamageTargetObservable, IObstacleBetweenObserver, IAttackTargetObserver
+public class BaseModel : MonoBehaviour, IObstacleBetweenObserver, IAttackTargetObserver, IDamageTargetObserver
 {
-    protected List<IDamageTargetObserver> _myObserversDamageTarget = new List<IDamageTargetObserver>();
     protected IController _controller;
     public IController Controller
     {
@@ -195,6 +195,7 @@ public class BaseModel : MonoBehaviour, IDamageTargetObservable, IObstacleBetwee
 
     public void TakeDamage(float damage)
     {
+        Debug.Log("TAKING DAMAGE: " + damage + " - " + name);
         if (HP <= 0)
         {
             SetFSMInput(
@@ -276,23 +277,7 @@ public class BaseModel : MonoBehaviour, IDamageTargetObservable, IObstacleBetwee
             }
         });
     }
-    public void AddObserverDamageTarget(IDamageTargetObserver obs)
-    {
-        _myObserversDamageTarget.Add(obs);
-    }
-
-    public void RemoveObserverDamageTarget(IDamageTargetObserver obs)
-    {
-        if (_myObserversDamageTarget.Contains(obs))
-        {
-            _myObserversDamageTarget.Remove(obs);
-        }
-    }
-
-    public void TriggerDamageTarget(string message, float damage)
-    {
-        _myObserversDamageTarget.ForEach(x => x.OnNotifyDamageTarget(message, damage));
-    }
+    
 
     public void OnNotifyObstacleBetween(string message)
     {
@@ -303,10 +288,33 @@ public class BaseModel : MonoBehaviour, IDamageTargetObservable, IObstacleBetwee
     {
         if (message.Equals("IsAttacking")) 
         {
+            Debug.Log("ATTACKING...");
             if (Rank.Equals("Leader"))
+            {
+                Debug.Log("LEADER ATTACK...");
                 FSMLeaders.SendInput(LeaderInputs.ATTACK);
-            else
+            }
+            else 
+            { 
+                Debug.Log("FOLLOWER ATTACK...");
                 FSM_NPCs.SendInput(NPCInputs.ATTACK);
+            }
         }
+    }
+
+    public void OnNotifyDamageTarget(string message, float damage)
+    {
+        if (message.Equals("IsDamaging")) 
+        {
+            StartCoroutine(TakeDamageCoroutine(damage));
+        }
+    }
+
+    IEnumerator TakeDamageCoroutine(float damage) 
+    {
+        Debug.Log("ANTES DE DAÑO...");
+        yield return new WaitForSeconds(1.5f);
+        TakeDamage(damage);
+        Debug.Log("DESPUES DE DAÑO... " + damage);
     }
 }

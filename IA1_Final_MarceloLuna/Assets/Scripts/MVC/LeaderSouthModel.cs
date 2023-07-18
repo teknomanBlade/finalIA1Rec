@@ -20,8 +20,6 @@ public class LeaderSouthModel : BaseModel
         var moveToPointBehaviour = new MoveToPoint(this);
         var attackBehaviour = new Attack(this);
         moveToPointBehaviour.AddObserverSetteableTarget(attackBehaviour);
-        moveToPointBehaviour.AddObserverAttackTarget(this);
-        moveToPointBehaviour.AddObserverObstacleBetween(this);
         previousMovementBehaviour = moveToPointBehaviour;
         currentBehaviour = moveToPointBehaviour;
 

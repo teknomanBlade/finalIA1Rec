@@ -3,7 +3,11 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Corner(1,1)
+  - Corner(1,23)
+  - Corner(23,1)
+  - Corner(23,23)
   layers:
   - Default
   - TransparentFX
