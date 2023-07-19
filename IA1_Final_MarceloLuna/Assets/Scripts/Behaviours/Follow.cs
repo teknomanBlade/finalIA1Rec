@@ -21,14 +21,13 @@ public class Follow : IBehaviour
         alignmentWeight = 1.5f;
         cohesionWeight = 1.2f;
         seekWeight = 4f;
-        targetSeek = _model.npcs
-            .Where(x => x.Rank.Equals("Leader") && x.Faction.Equals(_model.Faction))
-            .FirstOrDefault();
+        var targetsMatch = _model.npcs.Where(x => x.Rank.Equals("Leader") && x.Faction.Equals(_model.Faction)).ToList();
+        targetSeek = targetsMatch.FirstOrDefault();
     }
 
     public void ExecuteState()
     {
-        _model.TargetPosition = targetSeek.TargetPosition;
+        _model.TargetPosition = targetSeek.transform.position;
         if (_model.InSight())
         {
             AddForce(Seek(targetSeek.transform.position) * seekWeight +

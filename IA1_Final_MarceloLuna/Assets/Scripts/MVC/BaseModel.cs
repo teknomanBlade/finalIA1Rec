@@ -53,6 +53,7 @@ public class BaseModel : MonoBehaviour, IObstacleBetweenObserver, IAttackTargetO
         get { return _distanceNodeFinalThreshold; }
         set { _distanceNodeFinalThreshold = value; }
     }
+    [SerializeField]
     protected float _hp;
     public float HP
     {
@@ -168,7 +169,7 @@ public class BaseModel : MonoBehaviour, IObstacleBetweenObserver, IAttackTargetO
     public bool ObstaclesBetween;
     public BaseModel[] npcs;
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         npcs = FindObjectsOfType<BaseModel>();
         AngleThreshold = 60f;
@@ -185,9 +186,13 @@ public class BaseModel : MonoBehaviour, IObstacleBetweenObserver, IAttackTargetO
     }
     public void UpdateFSM_NPCs() 
     {
-        //_mFSM_NPCs.Update();
+        StartCoroutine(FSMWaitForInstance());
     }
-
+    IEnumerator FSMWaitForInstance() 
+    {
+        yield return new WaitUntil(() => _mFSM_NPCs != null);
+        _mFSM_NPCs.Update();
+    }
     public void UpdateFSMLeaders()
     {
         _mFSMLeaders.Update();
@@ -253,6 +258,12 @@ public class BaseModel : MonoBehaviour, IObstacleBetweenObserver, IAttackTargetO
     }
     public void GetNodeByLesserDistance()
     {
+        StartCoroutine(NodeByLesserDistance());
+    }
+
+    IEnumerator NodeByLesserDistance() 
+    {
+        yield return new WaitUntil(() => GameManager.instance != null);
         GameManager.instance.AllNodes.ForEach(x => {
             //Debug.Log("DISTANCE TO NODE " + x.name + ": " + Vector3.Distance(transform.position, x.transform.position)); 
             if (!x.isBlocked && Vector3.Distance(transform.position, x.transform.position) <= DistanceNodeThreshold)
@@ -263,6 +274,7 @@ public class BaseModel : MonoBehaviour, IObstacleBetweenObserver, IAttackTargetO
             }
         });
     }
+
     public void GetNodeFinalByLesserDistance(Vector3 position)
     {
         if (position.Equals(Vector3.zero)) return;
@@ -276,6 +288,14 @@ public class BaseModel : MonoBehaviour, IObstacleBetweenObserver, IAttackTargetO
                 //Debug.Log("FINAL NODE: " + finalNode.name);
             }
         });
+    }
+
+    public void GetNodeFinalFromCornersList() 
+    {
+        var q = GameManager.instance.CornerNodes;
+        var rnd = new System.Random();
+        finalNode = q.OrderBy(x => rnd.Next()).Take(1).FirstOrDefault();
+        TargetPosition = finalNode.transform.position;
     }
     
 

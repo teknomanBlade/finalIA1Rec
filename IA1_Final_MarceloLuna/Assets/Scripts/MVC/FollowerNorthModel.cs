@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class FollowerNorthModel : BaseModel
@@ -15,6 +16,14 @@ public class FollowerNorthModel : BaseModel
         FollowerNorthView = GetComponent<FollowerNorthView>();
         Controller = new FollowerNorthController(this, FollowerNorthView);
         #region EventFSM
+
+        var followBehaviour = new Follow(this);
+        var attackBehaviour = new Attack(this);
+        var escapeBehaviour = new Escape(this);
+        var dieBehaviour = new Die(this);
+
+        previousMovementBehaviour = followBehaviour;
+        currentBehaviour = followBehaviour;
 
         var follow = new State<NPCInputs>("FOLLOW");
         var attack = new State<NPCInputs>("ATTACK");
@@ -45,13 +54,14 @@ public class FollowerNorthModel : BaseModel
         {
             //CurrentState = NPCInputs.IDLE;
             //OnStateChanged((int)CurrentState);
-            //currentBehaviour = new Idle(rb);
+            CurrentNPCState = NPCInputs.FOLLOW;
+            currentBehaviour = previousMovementBehaviour;
             Debug.Log("START MOVE TO POINT...");
         };
 
         follow.OnUpdate += () =>
         {
-            //currentBehaviour.ExecuteState();
+            currentBehaviour.ExecuteState();
         };
 
         follow.OnExit -= x =>
@@ -61,15 +71,15 @@ public class FollowerNorthModel : BaseModel
 
         attack.OnEnter += x =>
         {
-            //CurrentState = NPCInputs.WANDER;
+            CurrentNPCState = NPCInputs.ATTACK;
             //OnStateChanged((int)CurrentState);
-            //currentBehaviour = new Wander(rb, Speed);
+            currentBehaviour = attackBehaviour;
             Debug.Log("START ATTACK...");
         };
 
         attack.OnUpdate += () =>
         {
-            //currentBehaviour.ExecuteState();
+            currentBehaviour.ExecuteState();
         };
 
         attack.OnExit -= x =>
@@ -79,15 +89,15 @@ public class FollowerNorthModel : BaseModel
 
         escape.OnEnter += x =>
         {
-            //CurrentState = NPCInputs.MOVE_TO_WAYPOINT;
+            CurrentNPCState = NPCInputs.ESCAPE;
             //OnStateChanged((int)CurrentState);
-            //currentBehaviour = previousMovementBehaviour;
+            currentBehaviour = escapeBehaviour;
             Debug.Log("START MOVE TO POINT...");
         };
 
         escape.OnUpdate += () =>
         {
-            //currentBehaviour.ExecuteState();
+            currentBehaviour.ExecuteState();
         };
 
         escape.OnExit -= x =>
@@ -97,16 +107,15 @@ public class FollowerNorthModel : BaseModel
 
         die.OnEnter += x =>
         {
-            /*CurrentState = NPCInputs.DIE;
-            OnStateChanged((int)CurrentState);
-            currentBehaviour = new Die(rb);
-            enemy.Level.Points.Add(Points);*/
+            CurrentNPCState = NPCInputs.DIE;
+            //OnStateChanged((int)CurrentState);
+            currentBehaviour = dieBehaviour;
             Debug.Log("START DIE...");
         };
 
         die.OnUpdate += () =>
         {
-            //currentBehaviour.ExecuteState();
+            currentBehaviour.ExecuteState();
         };
 
         die.OnExit -= x =>

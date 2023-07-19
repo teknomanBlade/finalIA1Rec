@@ -112,6 +112,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63dfed93ef0bbfc40a59f5113a9c1211, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _hp: 0
   ObstaclesLayer:
     serializedVersion: 2
     m_Bits: 64
@@ -124,10 +125,10 @@ MonoBehaviour:
   TargetPosition: {x: 0, y: 0, z: 0}
   currentNode: {fileID: 0}
   finalNode: {fileID: 0}
-  arriveRadius: 0
-  maxSpeed: 0
-  maxForce: 0
-  offsetY: 0
+  arriveRadius: 4.5
+  maxSpeed: 3
+  maxForce: 4
+  offsetY: 0.3
   _velocity: {x: 0, y: 0, z: 0}
   ObstaclesBetween: 0
   npcs: []

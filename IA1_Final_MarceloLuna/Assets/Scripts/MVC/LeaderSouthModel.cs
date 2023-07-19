@@ -19,6 +19,8 @@ public class LeaderSouthModel : BaseModel
         #region EventFSM
         var moveToPointBehaviour = new MoveToPoint(this);
         var attackBehaviour = new Attack(this);
+        var escapeBehaviour = new Escape(this);
+        var dieBehaviour = new Die(this);
         moveToPointBehaviour.AddObserverSetteableTarget(attackBehaviour);
         previousMovementBehaviour = moveToPointBehaviour;
         currentBehaviour = moveToPointBehaviour;
@@ -69,7 +71,6 @@ public class LeaderSouthModel : BaseModel
         attack.OnEnter += x =>
         {
             CurrentLeaderState = LeaderInputs.ATTACK;
-            //OnStateChanged((int)CurrentState);
             currentBehaviour = attackBehaviour;
             Debug.Log("START ATTACK...");
         };
@@ -86,34 +87,34 @@ public class LeaderSouthModel : BaseModel
 
         escape.OnEnter += x =>
         {
-            //CurrentState = LeaderInputs.MOVE_TO_WAYPOINT;
-            //OnStateChanged((int)CurrentState);
-            //currentBehaviour = previousMovementBehaviour;
-            Debug.Log("START MOVE TO POINT...");
+            CurrentLeaderState = LeaderInputs.ESCAPE;
+            currentBehaviour = escapeBehaviour;
+            GetNodeFinalFromCornersList();
+            Debug.Log("START ESCAPE...");
         };
 
         escape.OnUpdate += () =>
         {
-            //currentBehaviour.ExecuteState();
+            currentBehaviour.ExecuteState();
+            Debug.Log("EXECUTE ESCAPE...");
         };
 
         escape.OnExit -= x =>
         {
-            Debug.Log("END MOVE TO POINT...");
+            Debug.Log("END ESCAPE...");
         };
 
         die.OnEnter += x =>
         {
-            /*CurrentState = LeaderInputs.DIE;
-            OnStateChanged((int)CurrentState);
-            currentBehaviour = new Die(rb);
-            enemy.Level.Points.Add(Points);*/
+            CurrentLeaderState = LeaderInputs.DIE;
+            //OnStateChanged((int)CurrentState);
+            currentBehaviour = dieBehaviour;
             Debug.Log("START DIE...");
         };
 
         die.OnUpdate += () =>
         {
-            //currentBehaviour.ExecuteState();
+            currentBehaviour.ExecuteState();
         };
 
         die.OnExit -= x =>

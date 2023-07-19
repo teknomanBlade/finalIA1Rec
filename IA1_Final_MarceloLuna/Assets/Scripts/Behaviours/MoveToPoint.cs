@@ -122,7 +122,7 @@ public class MoveToPoint : IBehaviour, ISetteableTargetObservable, IObstacleBetw
                 else if (hit.collider.gameObject.layer == 8)
                 {
                     Debug.DrawRay(_model.transform.position, -_model.DirToTarget, Color.green);
-                    Debug.Log("LLEGA A DETECTAR ENEMIGO - MOVE TO POINT?");
+                    Debug.Log("LLEGA A DETECTAR ENEMIGO - MOVE TO POINT? " + hit.collider.gameObject.name);
                     TriggerSetteableTarget("SetAttackingTarget", hit.collider.gameObject.GetComponent<BaseModel>());
                     TriggerAttackTarget("IsAttacking");
                 }
