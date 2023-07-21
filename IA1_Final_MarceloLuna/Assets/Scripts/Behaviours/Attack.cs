@@ -25,15 +25,22 @@ public class Attack : IBehaviour, ISetteableTargetObserver
         if (_model.DistanceToTarget < _model.AttackDistanceThreshold)
         {
             Debug.Log("IS DAMAGING? " + _model.name);
-            target.TakeDamage(_model.Damage);
+            _model.StartCoroutine(TakeDamageCoroutine(target,_model.Damage));
             _model._velocity = Vector3.zero;
         }
-        else
+        /*else
         {
-            //_pursuitSteeringBehaviour.SetOwner(_owner).SetRank(_rank).SetViewModel(_viewModel);
-            //_pursuitSteeringBehaviour.Execute();
-        }
+            _pursuitSteeringBehaviour.SetOwner(_owner).SetRank(_rank).SetViewModel(_viewModel);
+            _pursuitSteeringBehaviour.Execute();
+        }*/
 
+    }
+    IEnumerator TakeDamageCoroutine(BaseModel target, float damage)
+    {
+        Debug.Log("ANTES DE DAÑO...");
+        yield return new WaitForSeconds(1.5f);
+        target.TakeDamage(_model.Damage);
+        Debug.Log("DESPUES DE DAÑO... " + damage);
     }
     public void OnNotifySetteableTarget(string message, BaseModel target)
     {

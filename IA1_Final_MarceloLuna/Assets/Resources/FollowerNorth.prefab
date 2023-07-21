@@ -131,7 +131,8 @@ MonoBehaviour:
   offsetY: 0.3
   _velocity: {x: 0, y: 0, z: 0}
   ObstaclesBetween: 0
-  npcs: []
+  _npcs: []
+  leaderNorth: {fileID: 0}
 --- !u!114 &-3047957732853841297
 MonoBehaviour:
   m_ObjectHideFlags: 0

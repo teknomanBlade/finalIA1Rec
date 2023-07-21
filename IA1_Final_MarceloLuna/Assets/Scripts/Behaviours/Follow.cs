@@ -3,42 +3,41 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class Follow : IBehaviour
+public class Follow : IBehaviour, ISetteableTargetObservable, IObstacleBetweenObservable, IAttackTargetObservable
 {
+    List<ISetteableTargetObserver> _myObserversSetteableTarget = new List<ISetteableTargetObserver>();
+    List<IObstacleBetweenObserver> _myObserversObstacleBetween = new List<IObstacleBetweenObserver>();
+    List<IAttackTargetObserver> _myObserversAttackTarget = new List<IAttackTargetObserver>();
     private BaseModel _model;
-    public float viewRadius;
-    public float separationWeight;
-    public float alignmentWeight;
-    public float cohesionWeight;
-    public float seekWeight;
     public BaseModel targetSeek;
     int index = 0;
-    public Follow(BaseModel model)
+    public Follow(BaseModel model, BaseModel target)
     {
         _model = model;
-        viewRadius = 2f;
-        separationWeight = 2f;
-        alignmentWeight = 1.5f;
-        cohesionWeight = 1.2f;
-        seekWeight = 4f;
-        var targetsMatch = _model.npcs.Where(x => x.Rank.Equals("Leader") && x.Faction.Equals(_model.Faction)).ToList();
-        targetSeek = targetsMatch.FirstOrDefault();
+        targetSeek = target;
+        //viewRadius = 2f;
+        //separationWeight = 2f;
+        //alignmentWeight = 1.5f;
+        //cohesionWeight = 1.2f;
+        //seekWeight = 4f;
     }
+
 
     public void ExecuteState()
     {
         _model.TargetPosition = targetSeek.transform.position;
+        DetectPlayer(_model.Faction);
         if (_model.InSight())
         {
-            AddForce(Seek(targetSeek.transform.position) * seekWeight +
-                 Separation() * separationWeight +
-                 Alignment() * alignmentWeight +
-                 Cohesion() * cohesionWeight);
+            AddForce(/*Seek(targetSeek.transform.position) * _model.seekWeight +*/
+                 Separation() * _model.separationWeight +
+                 Alignment() * _model.alignmentWeight +
+                 Cohesion() * _model.cohesionWeight);
             Move();
         }
         else 
         {
-            TravelPath(_model.GetPath(_model.currentNode, _model.finalNode));
+            TravelPath(_model.GetPath(_model.currentNode, targetSeek.finalNode));
         }
         
     }
@@ -67,10 +66,10 @@ public class Follow : IBehaviour
         Vector3 desired = new Vector3();
 
         int count = 0;
-        _model.npcs.ToList().ForEach(boid =>
+        _model.NPCs.ToList().ForEach(boid =>
             {
                 Vector3 dist = (boid.transform.position - _model.transform.position);
-                if (dist.magnitude < viewRadius)
+                if (dist.magnitude < _model.viewRadius)
                 {
                     desired.x += dist.x;
                     desired.z += dist.z;
@@ -91,9 +90,9 @@ public class Follow : IBehaviour
         Vector3 desired = new Vector3();
 
         int count = 0;
-        _model.npcs.ToList().ForEach(boid =>
+        _model.NPCs.ToList().ForEach(boid =>
             {
-                if (Vector3.Distance(_model.transform.position, boid.transform.position) < viewRadius)
+                if (Vector3.Distance(_model.transform.position, boid.transform.position) < _model.viewRadius)
                 {
                     desired.x += boid._velocity.x;
                     desired.z += boid._velocity.z;
@@ -112,9 +111,9 @@ public class Follow : IBehaviour
     {
         Vector3 desired = new Vector3();
         int count = 0;
-        _model.npcs.ToList().ForEach(boid =>
+        _model.NPCs.ToList().ForEach(boid =>
             {
-                if (Vector3.Distance(_model.transform.position, boid.transform.position) < viewRadius)
+                if (Vector3.Distance(_model.transform.position, boid.transform.position) < _model.viewRadius)
                 {
                     desired += boid.transform.position;
                     count++;
@@ -158,15 +157,15 @@ public class Follow : IBehaviour
     }
     public void DetectPlayer(string faction)
     {
-        var northerns = _model.npcs.Where(x => x.gameObject.GetComponent<BaseModel>().Faction.Contains("North")).ToList();
-        var southerns = _model.npcs.Where(x => x.gameObject.GetComponent<BaseModel>().Faction.Contains("South")).ToList();
+        var northerns = _model.NPCs.Where(x => x.gameObject.GetComponent<BaseModel>().Faction.Contains("North")).ToList();
+        var southerns = _model.NPCs.Where(x => x.gameObject.GetComponent<BaseModel>().Faction.Contains("South")).ToList();
         if (faction.Contains("North"))
         {
-            southerns.ForEach(x => EnemyDetection(x));
+            southerns.ForEach(npc => EnemyDetection(npc));
         }
         else
         {
-            northerns.ForEach(x => EnemyDetection(x));
+            northerns.ForEach(npc => EnemyDetection(npc));
         }
     }
 
@@ -186,7 +185,7 @@ public class Follow : IBehaviour
                 //Una vez que descartamos las primeras posibilidades, vamos a utilizar un raycast.            
                 if (hit.collider.gameObject.layer == 6)
                 {
-                    //TriggerObstacleBetween("HasObstaclesBetween");
+                    TriggerObstacleBetween("HasObstaclesBetween");
                     Debug.Log("LLEGA A DETECTAR OBSTACULO - MOVE TO POINT?");
                     Debug.DrawRay(_model.transform.position, -_model.DirToTarget, Color.red);
                 }
@@ -194,10 +193,64 @@ public class Follow : IBehaviour
                 {
                     Debug.DrawRay(_model.transform.position, -_model.DirToTarget, Color.green);
                     Debug.Log("LLEGA A DETECTAR ENEMIGO - MOVE TO POINT?");
-                    //TriggerSetteableTarget("SetAttackingTarget", hit.collider.gameObject.GetComponent<BaseModel>());
-                    //TriggerAttackTarget("IsAttacking");
+                    TriggerSetteableTarget("SetAttackingTarget", hit.collider.gameObject.GetComponent<BaseModel>());
+                    TriggerAttackTarget("IsAttacking");
                 }
             }
         }
+    }
+
+    public void AddObserverSetteableTarget(ISetteableTargetObserver obs)
+    {
+        _myObserversSetteableTarget.Add(obs);
+    }
+
+    public void RemoveObserverSetteableTarget(ISetteableTargetObserver obs)
+    {
+        if (_myObserversSetteableTarget.Contains(obs))
+        {
+            _myObserversSetteableTarget.Remove(obs);
+        }
+    }
+
+    public void TriggerSetteableTarget(string message, BaseModel target)
+    {
+        _myObserversSetteableTarget.ForEach(x => x.OnNotifySetteableTarget(message, target));
+    }
+
+    public void AddObserverObstacleBetween(IObstacleBetweenObserver obs)
+    {
+        _myObserversObstacleBetween.Add(obs);
+    }
+
+    public void RemoveObserverObstacleBetween(IObstacleBetweenObserver obs)
+    {
+        if (_myObserversObstacleBetween.Contains(obs))
+        {
+            _myObserversObstacleBetween.Remove(obs);
+        }
+    }
+
+    public void TriggerObstacleBetween(string message)
+    {
+        _myObserversObstacleBetween.ForEach(x => x.OnNotifyObstacleBetween(message));
+    }
+
+    public void AddObserverAttackTarget(IAttackTargetObserver obs)
+    {
+        _myObserversAttackTarget.Add(obs);
+    }
+
+    public void RemoveObserverAttackTarget(IAttackTargetObserver obs)
+    {
+        if (_myObserversAttackTarget.Contains(obs))
+        {
+            _myObserversAttackTarget.Remove(obs);
+        }
+    }
+
+    public void TriggerAttackTarget(string message)
+    {
+        _myObserversAttackTarget.ForEach(x => x.OnNotifyAttackTarget(message));
     }
 }

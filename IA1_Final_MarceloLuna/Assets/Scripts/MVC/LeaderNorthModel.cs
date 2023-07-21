@@ -8,6 +8,7 @@ public class LeaderNorthModel : BaseModel
     // Start is called before the first frame update
     void Awake()
     {
+        LoadAllNPCs();
         HP = 150.0f;
         MaxHP = HP;
         Faction = "North";

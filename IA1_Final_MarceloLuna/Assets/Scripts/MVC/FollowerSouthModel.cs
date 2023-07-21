@@ -5,32 +5,49 @@ using UnityEngine;
 
 public class FollowerSouthModel : BaseModel
 {
+    public BaseModel leaderSouth;
     // Start is called before the first frame update
     void Awake()
     {
+        LoadAllNPCs();
         HP = 100.0f;
         MaxHP = HP;
         Faction = "South";
         Rank = "Follower";
         Damage = 5.0f;
+        viewRadius = 2f;
+        separationWeight = 0.6f;
+        alignmentWeight = 0.45f;
+        cohesionWeight = 0.8f;
+        seekWeight = 0.5f;
         FollowerSouthView = GetComponent<FollowerSouthView>();
         Controller = new FollowerSouthController(this, FollowerSouthView);
 
         #region EventFSM
-        var followBehaviour = new Follow(this);
+        var idleBehaviour = new Idle(this, leaderSouth);
+        var followBehaviour = new Follow(this,leaderSouth);
         var attackBehaviour = new Attack(this);
         var escapeBehaviour = new Escape(this);
         var dieBehaviour = new Die(this);
 
-        previousMovementBehaviour = followBehaviour;
-        currentBehaviour = followBehaviour;
+        previousMovementBehaviour = idleBehaviour;
+        currentBehaviour = idleBehaviour;
 
+        var idle = new State<NPCInputs>("IDLE");
         var follow = new State<NPCInputs>("FOLLOW");
         var attack = new State<NPCInputs>("ATTACK");
         var escape = new State<NPCInputs>("ESCAPE");
         var die = new State<NPCInputs>("DIE");
 
+        StateConfigurer.Create(idle)
+            .SetTransition(NPCInputs.FOLLOW, follow)
+            .SetTransition(NPCInputs.ATTACK, attack)
+            .SetTransition(NPCInputs.ESCAPE, escape)
+            .SetTransition(NPCInputs.DIE, die)
+            .Done();
+
         StateConfigurer.Create(follow)
+            .SetTransition(NPCInputs.IDLE, idle)
             .SetTransition(NPCInputs.ATTACK, attack)
             .SetTransition(NPCInputs.ESCAPE, escape)
             .SetTransition(NPCInputs.DIE, die)
@@ -38,6 +55,7 @@ public class FollowerSouthModel : BaseModel
 
         StateConfigurer.Create(attack)
             .SetTransition(NPCInputs.FOLLOW, follow)
+            .SetTransition(NPCInputs.IDLE, idle)
             .SetTransition(NPCInputs.ESCAPE, escape)
             .SetTransition(NPCInputs.DIE, die)
             .Done();
@@ -45,17 +63,37 @@ public class FollowerSouthModel : BaseModel
         StateConfigurer.Create(escape)
             .SetTransition(NPCInputs.ATTACK, attack)
             .SetTransition(NPCInputs.FOLLOW, follow)
+            .SetTransition(NPCInputs.IDLE, idle)
             .SetTransition(NPCInputs.DIE, die)
             .Done();
 
         StateConfigurer.Create(die).Done();
+
+        idle.OnEnter += x =>
+        {
+            //CurrentState = NPCInputs.IDLE;
+            //OnStateChanged((int)CurrentState);
+            CurrentNPCState = NPCInputs.IDLE;
+            currentBehaviour = previousMovementBehaviour;
+            Debug.Log("START IDLE...");
+        };
+
+        idle.OnUpdate += () =>
+        {
+            currentBehaviour.ExecuteState();
+        };
+
+        idle.OnExit -= x =>
+        {
+            Debug.Log("END IDLE...");
+        };
 
         follow.OnEnter += x =>
         {
             //CurrentState = NPCInputs.IDLE;
             //OnStateChanged((int)CurrentState);
             CurrentNPCState = NPCInputs.FOLLOW;
-            currentBehaviour = previousMovementBehaviour;
+            currentBehaviour = followBehaviour;
             Debug.Log("START MOVE TO POINT...");
         };
 
@@ -92,6 +130,7 @@ public class FollowerSouthModel : BaseModel
             CurrentNPCState = NPCInputs.ESCAPE;
             //OnStateChanged((int)CurrentState);
             currentBehaviour = escapeBehaviour;
+            GetNodeFinalFromCornersList();
             Debug.Log("START MOVE TO POINT...");
         };
 

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class BaseModel : MonoBehaviour, IObstacleBetweenObserver, IAttackTargetObserver, IDamageTargetObserver
+public class BaseModel : MonoBehaviour, IObstacleBetweenObserver, IAttackTargetObserver
 {
     protected IController _controller;
     public IController Controller
@@ -96,6 +96,11 @@ public class BaseModel : MonoBehaviour, IObstacleBetweenObserver, IAttackTargetO
     public Vector3 TargetPosition;
     public Node currentNode;
     public Node finalNode;
+    public float viewRadius;
+    public float separationWeight;
+    public float alignmentWeight;
+    public float cohesionWeight;
+    public float seekWeight;
     private LeaderInputs _currentLeaderState;
     public LeaderInputs CurrentLeaderState
     {
@@ -115,7 +120,7 @@ public class BaseModel : MonoBehaviour, IObstacleBetweenObserver, IAttackTargetO
     public float maxForce;
     public float offsetY;
     public Vector3 _velocity;
-    public enum NPCInputs { ATTACK, FOLLOW, DIE, ESCAPE }
+    public enum NPCInputs { IDLE,ATTACK, FOLLOW, DIE, ESCAPE }
     protected EventFSM<NPCInputs> _mFSM_NPCs;
     public EventFSM<NPCInputs> FSM_NPCs
     {
@@ -167,11 +172,19 @@ public class BaseModel : MonoBehaviour, IObstacleBetweenObserver, IAttackTargetO
         set { _dirToTarget = value; }
     }
     public bool ObstaclesBetween;
-    public BaseModel[] npcs;
+    [SerializeField]
+    private BaseModel[] _npcs;
+    public BaseModel[] NPCs 
+    { 
+        get 
+        {
+            
+            return _npcs; 
+        } 
+    }
     // Start is called before the first frame update
-    void Awake()
+    void Start()
     {
-        npcs = FindObjectsOfType<BaseModel>();
         AngleThreshold = 60f;
         DistanceThreshold = 0.9f;
         DistanceNodeThreshold = 0.4f;
@@ -322,11 +335,19 @@ public class BaseModel : MonoBehaviour, IObstacleBetweenObserver, IAttackTargetO
         }
     }
 
-    public void OnNotifyDamageTarget(string message, float damage)
+    /*public void OnNotifyDamageTarget(string message, float damage)
     {
         if (message.Equals("IsDamaging")) 
         {
-            StartCoroutine(TakeDamageCoroutine(damage));
+            if (Faction.Equals("North"))
+            {
+                StartCoroutine(TakeDamageCoroutine(damage));
+            }
+            else 
+            {
+                StartCoroutine(TakeDamageCoroutine(damage));
+            }
+            
         }
     }
 
@@ -336,5 +357,11 @@ public class BaseModel : MonoBehaviour, IObstacleBetweenObserver, IAttackTargetO
         yield return new WaitForSeconds(1.5f);
         TakeDamage(damage);
         Debug.Log("DESPUES DE DAÑO... " + damage);
+    }*/
+
+    protected void LoadAllNPCs() 
+    {
+        _npcs = FindObjectsOfType<BaseModel>();
+        //Debug.Log("NPCs List: " + _npcs.Length);
     }
 }

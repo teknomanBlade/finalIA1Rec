@@ -87,8 +87,8 @@ public class MoveToPoint : IBehaviour, ISetteableTargetObservable, IObstacleBetw
 
     public void DetectPlayer(string faction)
     {
-        var northerns = _model.npcs.Where(x => x.gameObject.GetComponent<BaseModel>().Faction.Contains("North")).ToList();
-        var southerns = _model.npcs.Where(x => x.gameObject.GetComponent<BaseModel>().Faction.Contains("South")).ToList();
+        var northerns = _model.NPCs.Where(x => x.gameObject.GetComponent<BaseModel>().Faction.Contains("North")).ToList();
+        var southerns = _model.NPCs.Where(x => x.gameObject.GetComponent<BaseModel>().Faction.Contains("South")).ToList();
         if (faction.Contains("North"))
         {
             southerns.ForEach(x => EnemyDetection(x));

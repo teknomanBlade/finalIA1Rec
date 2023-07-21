@@ -372,6 +372,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6086983689833289662, guid: a60364315ab029d43972a7832768c7cc, type: 3}
+      propertyPath: leaderNorth
+      value: 
+      objectReference: {fileID: 1483421186}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a60364315ab029d43972a7832768c7cc, type: 3}
 --- !u!4 &344999237 stripped
@@ -434,6 +438,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6086983689833289662, guid: a60364315ab029d43972a7832768c7cc, type: 3}
+      propertyPath: leaderNorth
+      value: 
+      objectReference: {fileID: 1483421186}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a60364315ab029d43972a7832768c7cc, type: 3}
 --- !u!4 &351050266 stripped
@@ -587,6 +595,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 411709362}
     m_Modifications:
+    - target: {fileID: -2976404439790243719, guid: 9a34bd6e3c43f31458954c0252ab303c, type: 3}
+      propertyPath: leaderSouth
+      value: 
+      objectReference: {fileID: 2099998686}
     - target: {fileID: 3587732154714808283, guid: 9a34bd6e3c43f31458954c0252ab303c, type: 3}
       propertyPath: m_RootOrder
       value: 5
@@ -853,6 +865,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 411709362}
     m_Modifications:
+    - target: {fileID: -2976404439790243719, guid: 9a34bd6e3c43f31458954c0252ab303c, type: 3}
+      propertyPath: leaderSouth
+      value: 
+      objectReference: {fileID: 2099998686}
     - target: {fileID: 3587732154714808283, guid: 9a34bd6e3c43f31458954c0252ab303c, type: 3}
       propertyPath: m_RootOrder
       value: 8
@@ -1047,6 +1063,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6086983689833289662, guid: a60364315ab029d43972a7832768c7cc, type: 3}
+      propertyPath: leaderNorth
+      value: 
+      objectReference: {fileID: 1483421186}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a60364315ab029d43972a7832768c7cc, type: 3}
 --- !u!4 &1029624327 stripped
@@ -1352,6 +1372,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 411709362}
     m_Modifications:
+    - target: {fileID: -2976404439790243719, guid: 9a34bd6e3c43f31458954c0252ab303c, type: 3}
+      propertyPath: leaderSouth
+      value: 
+      objectReference: {fileID: 2099998686}
     - target: {fileID: 3587732154714808283, guid: 9a34bd6e3c43f31458954c0252ab303c, type: 3}
       propertyPath: m_RootOrder
       value: 7
@@ -1705,6 +1729,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 411709362}
     m_Modifications:
+    - target: {fileID: -2976404439790243719, guid: 9a34bd6e3c43f31458954c0252ab303c, type: 3}
+      propertyPath: leaderSouth
+      value: 
+      objectReference: {fileID: 2099998686}
     - target: {fileID: 3587732154714808283, guid: 9a34bd6e3c43f31458954c0252ab303c, type: 3}
       propertyPath: m_RootOrder
       value: 6
@@ -1902,6 +1930,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AllNodes: []
+  CornerNodes: []
   grid: {fileID: 1762290472}
   wallMask:
     serializedVersion: 2
@@ -1968,6 +1997,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3769753508625879421, guid: a47c2ecd3c2d6eb4194bdd21df177f30, type: 3}
   m_PrefabInstance: {fileID: 1483421183}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1483421186 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: -438880058158040247, guid: a47c2ecd3c2d6eb4194bdd21df177f30, type: 3}
+  m_PrefabInstance: {fileID: 1483421183}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ed1ae48ce39c754f8b7d706bccecc83, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1576358073
 GameObject:
   m_ObjectHideFlags: 0
@@ -3174,6 +3214,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6406543910804894955, guid: c16f507bed7c79240aeed918ff0633d3, type: 3}
   m_PrefabInstance: {fileID: 2099998683}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2099998686 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4350801614699351957, guid: c16f507bed7c79240aeed918ff0633d3, type: 3}
+  m_PrefabInstance: {fileID: 2099998683}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02974d340e7987245bd6ff4c5ef9a8b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2100347086
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3229,6 +3280,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6086983689833289662, guid: a60364315ab029d43972a7832768c7cc, type: 3}
+      propertyPath: leaderNorth
+      value: 
+      objectReference: {fileID: 1483421186}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a60364315ab029d43972a7832768c7cc, type: 3}
 --- !u!4 &2100347087 stripped
@@ -3388,6 +3443,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6086983689833289662, guid: a60364315ab029d43972a7832768c7cc, type: 3}
+      propertyPath: leaderNorth
+      value: 
+      objectReference: {fileID: 1483421186}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a60364315ab029d43972a7832768c7cc, type: 3}
 --- !u!1001 &3587732155321833646
@@ -3397,6 +3456,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 411709362}
     m_Modifications:
+    - target: {fileID: -2976404439790243719, guid: 9a34bd6e3c43f31458954c0252ab303c, type: 3}
+      propertyPath: leaderSouth
+      value: 
+      objectReference: {fileID: 2099998686}
     - target: {fileID: 3587732154714808283, guid: 9a34bd6e3c43f31458954c0252ab303c, type: 3}
       propertyPath: m_RootOrder
       value: 4
