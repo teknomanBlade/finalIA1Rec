@@ -8,6 +8,8 @@ TagManager:
   - Corner(1,23)
   - Corner(23,1)
   - Corner(23,23)
+  - DoorNorth
+  - DoorSouth
   layers:
   - Default
   - TransparentFX
@@ -18,7 +20,7 @@ TagManager:
   - Obstacles
   - Floor
   - NPC
-  - 
+  - Walls
   - 
   - 
   - 

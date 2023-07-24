@@ -16,16 +16,19 @@ public class FollowerSouthModel : BaseModel
         Rank = "Follower";
         Damage = 5.0f;
         viewRadius = 2f;
-        separationWeight = 0.6f;
-        alignmentWeight = 0.45f;
+        separationWeight = 0.8f;
+        alignmentWeight = 1f;
         cohesionWeight = 0.8f;
-        seekWeight = 0.5f;
+        seekWeight = 0.65f;
+        avoidWeight = 3.5f;
         FollowerSouthView = GetComponent<FollowerSouthView>();
         Controller = new FollowerSouthController(this, FollowerSouthView);
 
         #region EventFSM
         var idleBehaviour = new Idle(this, leaderSouth);
         var followBehaviour = new Follow(this,leaderSouth);
+        var avoidObstaclesBehaviour = new AvoidObstacles(this, leaderSouth);
+        followBehaviour.AddObserverObstacleBetween(avoidObstaclesBehaviour);
         var attackBehaviour = new Attack(this);
         var escapeBehaviour = new Escape(this);
         var dieBehaviour = new Die(this);
@@ -35,18 +38,29 @@ public class FollowerSouthModel : BaseModel
 
         var idle = new State<NPCInputs>("IDLE");
         var follow = new State<NPCInputs>("FOLLOW");
+        var avoidObstacles = new State<NPCInputs>("AVOID_OBSTACLES");
         var attack = new State<NPCInputs>("ATTACK");
         var escape = new State<NPCInputs>("ESCAPE");
         var die = new State<NPCInputs>("DIE");
 
         StateConfigurer.Create(idle)
             .SetTransition(NPCInputs.FOLLOW, follow)
+            .SetTransition(NPCInputs.AVOID_OBSTACLES, avoidObstacles)
             .SetTransition(NPCInputs.ATTACK, attack)
             .SetTransition(NPCInputs.ESCAPE, escape)
             .SetTransition(NPCInputs.DIE, die)
             .Done();
 
         StateConfigurer.Create(follow)
+            .SetTransition(NPCInputs.AVOID_OBSTACLES, avoidObstacles)
+            .SetTransition(NPCInputs.IDLE, idle)
+            .SetTransition(NPCInputs.ATTACK, attack)
+            .SetTransition(NPCInputs.ESCAPE, escape)
+            .SetTransition(NPCInputs.DIE, die)
+            .Done();
+
+        StateConfigurer.Create(avoidObstacles)
+            .SetTransition(NPCInputs.FOLLOW, follow)
             .SetTransition(NPCInputs.IDLE, idle)
             .SetTransition(NPCInputs.ATTACK, attack)
             .SetTransition(NPCInputs.ESCAPE, escape)
@@ -55,6 +69,7 @@ public class FollowerSouthModel : BaseModel
 
         StateConfigurer.Create(attack)
             .SetTransition(NPCInputs.FOLLOW, follow)
+            .SetTransition(NPCInputs.AVOID_OBSTACLES, avoidObstacles)
             .SetTransition(NPCInputs.IDLE, idle)
             .SetTransition(NPCInputs.ESCAPE, escape)
             .SetTransition(NPCInputs.DIE, die)
@@ -63,6 +78,7 @@ public class FollowerSouthModel : BaseModel
         StateConfigurer.Create(escape)
             .SetTransition(NPCInputs.ATTACK, attack)
             .SetTransition(NPCInputs.FOLLOW, follow)
+            .SetTransition(NPCInputs.AVOID_OBSTACLES, avoidObstacles)
             .SetTransition(NPCInputs.IDLE, idle)
             .SetTransition(NPCInputs.DIE, die)
             .Done();
@@ -94,7 +110,7 @@ public class FollowerSouthModel : BaseModel
             //OnStateChanged((int)CurrentState);
             CurrentNPCState = NPCInputs.FOLLOW;
             currentBehaviour = followBehaviour;
-            Debug.Log("START MOVE TO POINT...");
+            Debug.Log("START FOLLOW...");
         };
 
         follow.OnUpdate += () =>
@@ -104,7 +120,26 @@ public class FollowerSouthModel : BaseModel
 
         follow.OnExit -= x =>
         {
-            Debug.Log("END MOVE TO POINT...");
+            Debug.Log("END FOLLOW...");
+        };
+
+        avoidObstacles.OnEnter += x =>
+        {
+            //CurrentState = NPCInputs.IDLE;
+            //OnStateChanged((int)CurrentState);
+            CurrentNPCState = NPCInputs.AVOID_OBSTACLES;
+            currentBehaviour = avoidObstaclesBehaviour;
+            Debug.Log("START AVOID OBSTACLES...");
+        };
+
+        avoidObstacles.OnUpdate += () =>
+        {
+            currentBehaviour.ExecuteState();
+        };
+
+        avoidObstacles.OnExit -= x =>
+        {
+            Debug.Log("END AVOID OBSTACLES...");
         };
 
         attack.OnEnter += x =>
@@ -169,6 +204,13 @@ public class FollowerSouthModel : BaseModel
             //OnStateChanged((int)CurrentState);
         };
 
+        follow.GetTransition(NPCInputs.AVOID_OBSTACLES).OnTransition += x =>
+        {
+            //CurrentState = NPCInputs.ATTACK;
+            Debug.Log("TRANSITION FOLLOW TO AVOID OBSTACLES...");
+            //OnStateChanged((int)CurrentState);
+        };
+
         attack.GetTransition(NPCInputs.FOLLOW).OnTransition += x =>
         {
             //CurrentState = NPCInputs.MOVE_TO_POINT;
@@ -204,7 +246,7 @@ public class FollowerSouthModel : BaseModel
             //OnStateChanged((int)NPCInputs.WANDER);
         };
 
-        FSM_NPCs = new EventFSM<NPCInputs>(follow);
+        FSM_NPCs = new EventFSM<NPCInputs>(idle);
         #endregion
     }
 

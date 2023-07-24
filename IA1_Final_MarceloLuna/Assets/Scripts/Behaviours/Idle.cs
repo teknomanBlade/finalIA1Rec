@@ -15,9 +15,16 @@ public class Idle : IBehaviour
     public void ExecuteState()
     {
         _model._velocity = Vector3.zero;
-        if (_target._velocity != Vector3.zero) 
+        if (_target._velocity != Vector3.zero)
         {
             Debug.Log("SE MOVIO EL LIDER...");
+            //Debug.Log("NPCS LENGTH: " + _model.NPCs.Length);
+            _model.FSM_NPCs.SendInput(BaseModel.NPCInputs.FOLLOW);
         }
+        /*else 
+        {
+            _model._velocity = Vector3.zero;
+            _model.FSM_NPCs.SendInput(BaseModel.NPCInputs.IDLE);
+        }*/
     }
 }

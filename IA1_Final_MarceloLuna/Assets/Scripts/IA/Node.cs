@@ -75,4 +75,11 @@ public class Node : MonoBehaviour
             SetBlocked(true);
         }
     }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.layer == 6)
+        {
+            SetBlocked(false);
+        }
+    }
 }

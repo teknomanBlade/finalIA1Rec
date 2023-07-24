@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class BaseModel : MonoBehaviour, IObstacleBetweenObserver, IAttackTargetObserver
+public class BaseModel : MonoBehaviour, /*IObstacleBetweenObserver,*/ IAttackTargetObserver
 {
     protected IController _controller;
     public IController Controller
@@ -100,6 +100,7 @@ public class BaseModel : MonoBehaviour, IObstacleBetweenObserver, IAttackTargetO
     public float separationWeight;
     public float alignmentWeight;
     public float cohesionWeight;
+    public float avoidWeight;
     public float seekWeight;
     private LeaderInputs _currentLeaderState;
     public LeaderInputs CurrentLeaderState
@@ -120,7 +121,7 @@ public class BaseModel : MonoBehaviour, IObstacleBetweenObserver, IAttackTargetO
     public float maxForce;
     public float offsetY;
     public Vector3 _velocity;
-    public enum NPCInputs { IDLE,ATTACK, FOLLOW, DIE, ESCAPE }
+    public enum NPCInputs { IDLE,ATTACK, FOLLOW, AVOID_OBSTACLES , DIE, ESCAPE }
     protected EventFSM<NPCInputs> _mFSM_NPCs;
     public EventFSM<NPCInputs> FSM_NPCs
     {
@@ -312,10 +313,10 @@ public class BaseModel : MonoBehaviour, IObstacleBetweenObserver, IAttackTargetO
     }
     
 
-    public void OnNotifyObstacleBetween(string message)
+    /*public void OnNotifyObstacleBetween(string message, GameObject obstacle)
     {
 
-    }
+    }*/
 
     public void OnNotifyAttackTarget(string message)
     {
@@ -364,4 +365,7 @@ public class BaseModel : MonoBehaviour, IObstacleBetweenObserver, IAttackTargetO
         _npcs = FindObjectsOfType<BaseModel>();
         //Debug.Log("NPCs List: " + _npcs.Length);
     }
+   
+
+   
 }

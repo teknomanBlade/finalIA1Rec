@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface IObstacleBetweenObserver
 {
-    void OnNotifyObstacleBetween(string message);
+    void OnNotifyObstacleBetween(string message, GameObject obstacle);
 }

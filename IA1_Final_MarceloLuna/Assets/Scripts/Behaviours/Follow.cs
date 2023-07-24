@@ -15,24 +15,28 @@ public class Follow : IBehaviour, ISetteableTargetObservable, IObstacleBetweenOb
     {
         _model = model;
         targetSeek = target;
-        //viewRadius = 2f;
-        //separationWeight = 2f;
-        //alignmentWeight = 1.5f;
-        //cohesionWeight = 1.2f;
-        //seekWeight = 4f;
     }
 
+    public bool ChooseByNameAndFaction(BaseModel npc) 
+    {
+        var containsFollower = npc.Rank.Equals("Follower");
+        var isSameFaction = npc.Faction.Equals(_model.Faction);
 
+        return containsFollower && isSameFaction;
+    }
+    
     public void ExecuteState()
     {
         _model.TargetPosition = targetSeek.transform.position;
         DetectPlayer(_model.Faction);
         if (_model.InSight())
         {
-            AddForce(/*Seek(targetSeek.transform.position) * _model.seekWeight +*/
-                 Separation() * _model.separationWeight +
-                 Alignment() * _model.alignmentWeight +
-                 Cohesion() * _model.cohesionWeight);
+            AddForce(
+                     Seek(targetSeek.transform.position) * _model.seekWeight +
+                     Separation() * _model.separationWeight +
+                     Alignment() * _model.alignmentWeight +
+                     Cohesion() * _model.cohesionWeight
+                    );
             Move();
         }
         else 
@@ -61,22 +65,27 @@ public class Follow : IBehaviour, ISetteableTargetObservable, IObstacleBetweenOb
         float speed = _model.maxSpeed;
         _model.transform.position += speed * Time.deltaTime * dir.normalized;
     }
+    
     Vector3 Separation()
     {
         Vector3 desired = new Vector3();
 
         int count = 0;
-        _model.NPCs.ToList().ForEach(boid =>
+        
+        var allFactionBoids = _model.NPCs.Where(x => ChooseByNameAndFaction(x)).ToList();
+
+        foreach (var boid in allFactionBoids)
+        {
+            if (boid.gameObject.name.Equals(_model.gameObject.name)) continue;
+
+            Vector3 dist = (boid.transform.position - _model.transform.position);
+            if (dist.magnitude < _model.viewRadius)
             {
-                Vector3 dist = (boid.transform.position - _model.transform.position);
-                if (dist.magnitude < _model.viewRadius)
-                {
-                    desired.x += dist.x;
-                    desired.z += dist.z;
-                    count++;
-                }
+                desired.x += dist.x;
+                desired.z += dist.z;
+                count++;
             }
-        );
+        }
         
         if (count <= 0) return desired;
 
@@ -90,16 +99,20 @@ public class Follow : IBehaviour, ISetteableTargetObservable, IObstacleBetweenOb
         Vector3 desired = new Vector3();
 
         int count = 0;
-        _model.NPCs.ToList().ForEach(boid =>
+
+        var allFactionBoids = _model.NPCs.Where(x => ChooseByNameAndFaction(x)).ToList();
+
+        foreach (var boid in allFactionBoids)
+        {
+            if (boid.gameObject.name.Equals(_model.gameObject.name)) continue;
+
+            if (Vector3.Distance(_model.transform.position, boid.transform.position) < _model.viewRadius)
             {
-                if (Vector3.Distance(_model.transform.position, boid.transform.position) < _model.viewRadius)
-                {
-                    desired.x += boid._velocity.x;
-                    desired.z += boid._velocity.z;
-                    count++;
-                }
+                desired.x += boid._velocity.x;
+                desired.z += boid._velocity.z;
+                count++;
             }
-        );
+        }
         
         if (count == 0) return desired;
         desired /= count;
@@ -111,19 +124,23 @@ public class Follow : IBehaviour, ISetteableTargetObservable, IObstacleBetweenOb
     {
         Vector3 desired = new Vector3();
         int count = 0;
-        _model.NPCs.ToList().ForEach(boid =>
-            {
-                if (Vector3.Distance(_model.transform.position, boid.transform.position) < _model.viewRadius)
-                {
-                    desired += boid.transform.position;
-                    count++;
-                }
-            }
-        );
         
+        var allFactionBoids = _model.NPCs.Where(x => ChooseByNameAndFaction(x)).ToList();
+
+        foreach (var boid in allFactionBoids)
+        {
+            if (boid.gameObject.name.Equals(_model.gameObject.name)) continue;
+
+            if (Vector3.Distance(_model.transform.position, boid.transform.position) < _model.viewRadius)
+            {
+                desired += boid.transform.position;
+                count++;
+            }
+        }
+
         if (count == 0) return desired;
         desired /= count;
-        desired = (desired - _model.transform.position); //pos final - pos inicial
+        desired = (desired - _model.transform.position);
         desired.y = 0;
 
         return (CalculateSteering(desired));
@@ -182,10 +199,10 @@ public class Follow : IBehaviour, ISetteableTargetObservable, IObstacleBetweenOb
         {
             if (Physics.Raycast(_model.transform.position, -_model.DirToTarget, out RaycastHit hit, _model.DistanceToTarget))
             {
-                //Una vez que descartamos las primeras posibilidades, vamos a utilizar un raycast.            
                 if (hit.collider.gameObject.layer == 6)
                 {
-                    TriggerObstacleBetween("HasObstaclesBetween");
+                    TriggerObstacleBetween("HasObstaclesBetween", hit.collider.gameObject);
+                    _model.FSM_NPCs.SendInput(BaseModel.NPCInputs.AVOID_OBSTACLES);
                     Debug.Log("LLEGA A DETECTAR OBSTACULO - MOVE TO POINT?");
                     Debug.DrawRay(_model.transform.position, -_model.DirToTarget, Color.red);
                 }
@@ -231,9 +248,9 @@ public class Follow : IBehaviour, ISetteableTargetObservable, IObstacleBetweenOb
         }
     }
 
-    public void TriggerObstacleBetween(string message)
+    public void TriggerObstacleBetween(string message, GameObject obstacle)
     {
-        _myObserversObstacleBetween.ForEach(x => x.OnNotifyObstacleBetween(message));
+        _myObserversObstacleBetween.ForEach(x => x.OnNotifyObstacleBetween(message, obstacle));
     }
 
     public void AddObserverAttackTarget(IAttackTargetObserver obs)

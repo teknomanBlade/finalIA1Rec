@@ -14,7 +14,6 @@ public class MoveToPoint : IBehaviour, ISetteableTargetObservable, IObstacleBetw
     {
         _model = model;
         AddObserverAttackTarget(_model);
-        AddObserverObstacleBetween(_model);
     }
 
     public void ExecuteState()
@@ -115,7 +114,7 @@ public class MoveToPoint : IBehaviour, ISetteableTargetObservable, IObstacleBetw
                 //Una vez que descartamos las primeras posibilidades, vamos a utilizar un raycast.            
                 if (hit.collider.gameObject.layer == 6)
                 {
-                    TriggerObstacleBetween("HasObstaclesBetween");
+                    TriggerObstacleBetween("HasObstaclesBetween",hit.collider.gameObject);
                     Debug.Log("LLEGA A DETECTAR OBSTACULO - MOVE TO POINT?");
                     Debug.DrawRay(_model.transform.position, -_model.DirToTarget, Color.red);
                 }
@@ -160,9 +159,9 @@ public class MoveToPoint : IBehaviour, ISetteableTargetObservable, IObstacleBetw
         }
     }
 
-    public void TriggerObstacleBetween(string message)
+    public void TriggerObstacleBetween(string message, GameObject obstacle)
     {
-        _myObserversObstacleBetween.ForEach(x => x.OnNotifyObstacleBetween(message));
+        _myObserversObstacleBetween.ForEach(x => x.OnNotifyObstacleBetween(message, obstacle));
     }
 
     public void AddObserverAttackTarget(IAttackTargetObserver obs)

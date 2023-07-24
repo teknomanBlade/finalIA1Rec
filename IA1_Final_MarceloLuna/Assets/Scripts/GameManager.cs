@@ -14,8 +14,6 @@ public class GameManager : MonoBehaviour
     public ThetaStar thetaStar;
     public NodeGrid grid;
 
-    //public Agent myAgent;
-
     public LayerMask wallMask;
     private void Awake()
     {
@@ -28,10 +26,6 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        /*if (Input.GetKeyDown(KeyCode.Space))
-        {
-            PaintPathfinding(pathfindingType);
-        }*/
 
     }
     public void SetStartingNode(Node n)
@@ -39,9 +33,6 @@ public class GameManager : MonoBehaviour
         if (_startingNode != null) ChangeColor(_startingNode.gameObject, Color.white);
         _startingNode = n;
         ChangeColor(_startingNode.gameObject, Color.red);
-
-
-        //myAgent.SetPosition(n.transform.position + Vector3.up);
     }
     public void SetGoalNode(Node n)
     {
@@ -71,20 +62,4 @@ public class GameManager : MonoBehaviour
     {
         return !Physics.Raycast(start, end - start, (end - start).magnitude, wallMask); //chequear si funciona esto 
     }
-
-    void PaintPathfinding()
-    {
-        grid.ClearColors();
-        List<Node> path = null;
-        
-        path = thetaStar.GetPath(_startingNode, _goalNode); //llamamos a la funcion de la clase Theta*
-         
-        if (path == null || path.Count <= 0) return;
-        PaintPath(path);
-
-        //myAgent.SetPath(path);
-
-    }
-
-
 }
