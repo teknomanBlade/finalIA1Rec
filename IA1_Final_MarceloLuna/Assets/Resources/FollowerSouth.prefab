@@ -125,9 +125,10 @@ MonoBehaviour:
   TargetPosition: {x: 0, y: 0, z: 0}
   currentNode: {fileID: 0}
   finalNode: {fileID: 0}
+  avoidWeight: 0
   arriveRadius: 4.5
-  maxSpeed: 3
-  maxForce: 4
+  maxSpeed: 1.8
+  maxForce: 3.6
   offsetY: 0.3
   _velocity: {x: 0, y: 0, z: 0}
   ObstaclesBetween: 0

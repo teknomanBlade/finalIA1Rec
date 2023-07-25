@@ -24,6 +24,8 @@ public class AvoidObstacles : IBehaviour, IObstacleBetweenObserver
         else
         {
             Debug.Log("VE AL LIDER");
+            ApplyForce(Seek(_target.transform.position));
+            Move();
         }
     }
 

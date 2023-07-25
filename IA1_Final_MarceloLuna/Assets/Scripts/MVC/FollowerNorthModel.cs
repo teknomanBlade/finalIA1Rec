@@ -15,12 +15,7 @@ public class FollowerNorthModel : BaseModel
         Faction = "North";
         Rank = "Follower";
         Damage = 5.0f;
-        viewRadius = 2f;
-        separationWeight = 0.8f;
-        alignmentWeight = 1f;
-        cohesionWeight = 0.8f;
         avoidWeight = 3.5f;
-        seekWeight = 0.65f;
         FollowerNorthView = GetComponent<FollowerNorthView>();
         Controller = new FollowerNorthController(this, FollowerNorthView);
         #region EventFSM

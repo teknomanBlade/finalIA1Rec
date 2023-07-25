@@ -106,7 +106,7 @@ public class MoveToPoint : IBehaviour, ISetteableTargetObservable, IObstacleBetw
         //Debug.Log("DISTANCIA AL OBJETIVO: " + viewModel.DistanceToTarget);
         //Debug.Log("HAY OBSTACULOS: " + viewModel.ObstaclesBetween);
         _model.AngleToTarget = Vector3.Angle(-_model.transform.forward, _model.DirToTarget);
-
+        Debug.DrawRay(_model.transform.position, -_model.DirToTarget, Color.white);
         if (_model.DistanceToTarget < _model.DistanceThreshold && _model.AngleToTarget < _model.AngleThreshold)
         {
             if (Physics.Raycast(_model.transform.position, -_model.DirToTarget, out RaycastHit hit, _model.DistanceToTarget))

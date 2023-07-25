@@ -10,6 +10,7 @@ TagManager:
   - Corner(23,23)
   - DoorNorth
   - DoorSouth
+  - Walls
   layers:
   - Default
   - TransparentFX

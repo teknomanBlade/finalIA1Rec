@@ -15,15 +15,9 @@ public class FollowerSouthModel : BaseModel
         Faction = "South";
         Rank = "Follower";
         Damage = 5.0f;
-        viewRadius = 2f;
-        separationWeight = 0.8f;
-        alignmentWeight = 1f;
-        cohesionWeight = 0.8f;
-        seekWeight = 0.65f;
         avoidWeight = 3.5f;
         FollowerSouthView = GetComponent<FollowerSouthView>();
         Controller = new FollowerSouthController(this, FollowerSouthView);
-
         #region EventFSM
         var idleBehaviour = new Idle(this, leaderSouth);
         var followBehaviour = new Follow(this,leaderSouth);

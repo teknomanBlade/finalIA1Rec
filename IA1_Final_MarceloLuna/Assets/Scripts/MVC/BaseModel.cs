@@ -96,12 +96,8 @@ public class BaseModel : MonoBehaviour, /*IObstacleBetweenObserver,*/ IAttackTar
     public Vector3 TargetPosition;
     public Node currentNode;
     public Node finalNode;
-    public float viewRadius;
-    public float separationWeight;
-    public float alignmentWeight;
-    public float cohesionWeight;
+    
     public float avoidWeight;
-    public float seekWeight;
     private LeaderInputs _currentLeaderState;
     public LeaderInputs CurrentLeaderState
     {

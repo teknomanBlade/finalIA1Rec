@@ -11,10 +11,20 @@ public class Follow : IBehaviour, ISetteableTargetObservable, IObstacleBetweenOb
     private BaseModel _model;
     public BaseModel targetSeek;
     int index = 0;
+    public float viewRadius;
+    public float separationWeight;
+    public float alignmentWeight;
+    public float cohesionWeight;
+    public float seekWeight;
     public Follow(BaseModel model, BaseModel target)
     {
         _model = model;
         targetSeek = target;
+        viewRadius = 3f;
+        separationWeight = 0.75f;
+        alignmentWeight = 1f;
+        cohesionWeight = 0.25f;
+        seekWeight = 0.4f;
     }
 
     public bool ChooseByNameAndFaction(BaseModel npc) 
@@ -32,10 +42,10 @@ public class Follow : IBehaviour, ISetteableTargetObservable, IObstacleBetweenOb
         if (_model.InSight())
         {
             AddForce(
-                     Seek(targetSeek.transform.position) * _model.seekWeight +
-                     Separation() * _model.separationWeight +
-                     Alignment() * _model.alignmentWeight +
-                     Cohesion() * _model.cohesionWeight
+                     Separation() * separationWeight +
+                     Alignment() * alignmentWeight +
+                     Cohesion() * cohesionWeight +
+                     Seek(targetSeek.transform.position) * seekWeight
                     );
             Move();
         }
@@ -73,13 +83,14 @@ public class Follow : IBehaviour, ISetteableTargetObservable, IObstacleBetweenOb
         int count = 0;
         
         var allFactionBoids = _model.NPCs.Where(x => ChooseByNameAndFaction(x)).ToList();
+        //Debug.Log("COUNT FACTION BOIDS SEPARATION: " + allFactionBoids.Count);
 
         foreach (var boid in allFactionBoids)
         {
             if (boid.gameObject.name.Equals(_model.gameObject.name)) continue;
 
             Vector3 dist = (boid.transform.position - _model.transform.position);
-            if (dist.magnitude < _model.viewRadius)
+            if (dist.magnitude < viewRadius)
             {
                 desired.x += dist.x;
                 desired.z += dist.z;
@@ -101,12 +112,12 @@ public class Follow : IBehaviour, ISetteableTargetObservable, IObstacleBetweenOb
         int count = 0;
 
         var allFactionBoids = _model.NPCs.Where(x => ChooseByNameAndFaction(x)).ToList();
-
+        //Debug.Log("COUNT FACTION BOIDS ALIGNMENT: " + allFactionBoids.Count);
         foreach (var boid in allFactionBoids)
         {
             if (boid.gameObject.name.Equals(_model.gameObject.name)) continue;
 
-            if (Vector3.Distance(_model.transform.position, boid.transform.position) < _model.viewRadius)
+            if (Vector3.Distance(_model.transform.position, boid.transform.position) < viewRadius)
             {
                 desired.x += boid._velocity.x;
                 desired.z += boid._velocity.z;
@@ -126,12 +137,13 @@ public class Follow : IBehaviour, ISetteableTargetObservable, IObstacleBetweenOb
         int count = 0;
         
         var allFactionBoids = _model.NPCs.Where(x => ChooseByNameAndFaction(x)).ToList();
+        //Debug.Log("COUNT FACTION BOIDS COHESION: " + allFactionBoids.Count);
 
         foreach (var boid in allFactionBoids)
         {
             if (boid.gameObject.name.Equals(_model.gameObject.name)) continue;
 
-            if (Vector3.Distance(_model.transform.position, boid.transform.position) < _model.viewRadius)
+            if (Vector3.Distance(_model.transform.position, boid.transform.position) < viewRadius)
             {
                 desired += boid.transform.position;
                 count++;
@@ -158,6 +170,17 @@ public class Follow : IBehaviour, ISetteableTargetObservable, IObstacleBetweenOb
     Vector3 Seek(Vector3 pos)
     {
         Vector3 desired = (pos - _model.transform.position).normalized * _model.maxSpeed;
+        var dirToLeader = (pos - _model.transform.position).normalized;
+        var distanceToLeader = Vector3.Distance(pos, _model.transform.position);
+        Debug.DrawRay(_model.transform.position, dirToLeader, Color.white);
+        if (Physics.Raycast(_model.transform.position, -dirToLeader, out RaycastHit hit, distanceToLeader, _model.ObstaclesLayer)) 
+        {
+            //Debug.Log("HIT OBSTACLE");
+            Debug.DrawRay(_model.transform.position, dirToLeader, Color.red);
+            TriggerObstacleBetween("HasObstaclesBetween", hit.collider.gameObject);
+            _model.FSM_NPCs.SendInput(BaseModel.NPCInputs.AVOID_OBSTACLES);
+        }
+
         return CalculateSteering(desired);
     }
     void AddForce(Vector3 force)
@@ -194,19 +217,12 @@ public class Follow : IBehaviour, ISetteableTargetObservable, IObstacleBetweenOb
         //Debug.Log("DISTANCIA AL OBJETIVO: " + viewModel.DistanceToTarget);
         //Debug.Log("HAY OBSTACULOS: " + viewModel.ObstaclesBetween);
         _model.AngleToTarget = Vector3.Angle(-_model.transform.forward, _model.DirToTarget);
-
+       
         if (_model.DistanceToTarget < _model.DistanceThreshold && _model.AngleToTarget < _model.AngleThreshold)
         {
             if (Physics.Raycast(_model.transform.position, -_model.DirToTarget, out RaycastHit hit, _model.DistanceToTarget))
             {
-                if (hit.collider.gameObject.layer == 6)
-                {
-                    TriggerObstacleBetween("HasObstaclesBetween", hit.collider.gameObject);
-                    _model.FSM_NPCs.SendInput(BaseModel.NPCInputs.AVOID_OBSTACLES);
-                    Debug.Log("LLEGA A DETECTAR OBSTACULO - MOVE TO POINT?");
-                    Debug.DrawRay(_model.transform.position, -_model.DirToTarget, Color.red);
-                }
-                else if (hit.collider.gameObject.layer == 8)
+                if (hit.collider.gameObject.layer == 8)
                 {
                     Debug.DrawRay(_model.transform.position, -_model.DirToTarget, Color.green);
                     Debug.Log("LLEGA A DETECTAR ENEMIGO - MOVE TO POINT?");
