@@ -28,11 +28,17 @@ public class Attack : IBehaviour, ISetteableTargetObserver
             _model.StartCoroutine(TakeDamageCoroutine(target,_model.Damage));
             _model._velocity = Vector3.zero;
         }
-        /*else
+        else
         {
-            _pursuitSteeringBehaviour.SetOwner(_owner).SetRank(_rank).SetViewModel(_viewModel);
-            _pursuitSteeringBehaviour.Execute();
-        }*/
+            if (_model.Rank.Equals("Leader"))
+            {
+                _model.FSMLeaders.SendInput(BaseModel.LeaderInputs.MOVE_TO_POINT);
+            }
+            else 
+            {
+                _model.FSM_NPCs.SendInput(BaseModel.NPCInputs.FOLLOW);
+            }
+        }
 
     }
     IEnumerator TakeDamageCoroutine(BaseModel target, float damage)

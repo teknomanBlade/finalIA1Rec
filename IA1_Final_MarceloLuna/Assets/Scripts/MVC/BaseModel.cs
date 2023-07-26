@@ -131,6 +131,7 @@ public class BaseModel : MonoBehaviour, /*IObstacleBetweenObserver,*/ IAttackTar
         get { return _mFSMLeaders; }
         set { _mFSMLeaders = value; }
     }
+    [SerializeField]
     protected float _distanceToTarget;
     public float DistanceToTarget
     {
@@ -149,6 +150,7 @@ public class BaseModel : MonoBehaviour, /*IObstacleBetweenObserver,*/ IAttackTar
         get { return _distanceThreshold; }
         set { _distanceThreshold = value; }
     }
+    [SerializeField]
     protected float _attackDistanceThreshold;
     public float AttackDistanceThreshold
     {

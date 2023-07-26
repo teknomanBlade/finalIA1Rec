@@ -15,7 +15,8 @@ public class FollowerNorthModel : BaseModel
         Faction = "North";
         Rank = "Follower";
         Damage = 5.0f;
-        avoidWeight = 3.5f;
+        AttackDistanceThreshold = 1.5f;
+        avoidWeight = 4f;
         FollowerNorthView = GetComponent<FollowerNorthView>();
         Controller = new FollowerNorthController(this, FollowerNorthView);
         #region EventFSM
@@ -202,6 +203,13 @@ public class FollowerNorthModel : BaseModel
         {
             //CurrentState = NPCInputs.ATTACK;
             Debug.Log("TRANSITION FOLLOW TO AVOID OBSTACLES...");
+            //OnStateChanged((int)CurrentState);
+        };
+
+        avoidObstacles.GetTransition(NPCInputs.FOLLOW).OnTransition += x =>
+        {
+            //CurrentState = NPCInputs.ATTACK;
+            Debug.Log("TRANSITION AVOID OBSTACLES TO FOLLOW...");
             //OnStateChanged((int)CurrentState);
         };
 

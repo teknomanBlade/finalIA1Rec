@@ -55,6 +55,9 @@ public class MoveToPoint : IBehaviour, ISetteableTargetObservable, IObstacleBetw
     {
         _model.GetNodeByLesserDistance();
         _model.transform.position += _model._velocity * Time.deltaTime;
+        var pos = _model.transform.position;
+        pos.y = Mathf.Clamp(pos.y, 0.17f, 0.17f);
+        _model.transform.position = pos;
         _model.transform.forward = _model._velocity;
         _model.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
     }
@@ -112,13 +115,7 @@ public class MoveToPoint : IBehaviour, ISetteableTargetObservable, IObstacleBetw
             if (Physics.Raycast(_model.transform.position, -_model.DirToTarget, out RaycastHit hit, _model.DistanceToTarget))
             {
                 //Una vez que descartamos las primeras posibilidades, vamos a utilizar un raycast.            
-                if (hit.collider.gameObject.layer == 6)
-                {
-                    TriggerObstacleBetween("HasObstaclesBetween",hit.collider.gameObject);
-                    Debug.Log("LLEGA A DETECTAR OBSTACULO - MOVE TO POINT?");
-                    Debug.DrawRay(_model.transform.position, -_model.DirToTarget, Color.red);
-                }
-                else if (hit.collider.gameObject.layer == 8)
+                if (hit.collider.gameObject.layer == 8)
                 {
                     Debug.DrawRay(_model.transform.position, -_model.DirToTarget, Color.green);
                     Debug.Log("LLEGA A DETECTAR ENEMIGO - MOVE TO POINT? " + hit.collider.gameObject.name);

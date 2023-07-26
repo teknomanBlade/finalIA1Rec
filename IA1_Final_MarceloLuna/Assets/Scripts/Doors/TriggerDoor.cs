@@ -12,7 +12,7 @@ public class TriggerDoor : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        radius = 2f;
+        radius = 1.2f;
         pos = transform.position;
         dir = transform.forward;
         Anim = GetComponentInParent<Animator>();
@@ -27,11 +27,17 @@ public class TriggerDoor : MonoBehaviour
         {
             colliders.Where(x => x.gameObject.name.Contains("Leader")).ToList().ForEach( npc => {
                 Debug.Log("LEADER: " + npc.gameObject.name);
-                Anim.SetBool("IsOpened", false);
+                StartCoroutine(CloseDoor());
             });
         }
     }
-    
+
+    IEnumerator CloseDoor() 
+    {
+        yield return new WaitForSeconds(0.6f);
+        Anim.SetBool("IsOpened", false);
+    }
+
     private void OnDrawGizmos()
     {
         Gizmos.DrawWireSphere(pos, radius);

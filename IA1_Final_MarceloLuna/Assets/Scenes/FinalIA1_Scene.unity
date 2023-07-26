@@ -137,7 +137,7 @@ GameObject:
   - component: {fileID: 207045689}
   m_Layer: 6
   m_Name: Cube (3)
-  m_TagString: Untagged
+  m_TagString: Walls
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1088,7 +1088,7 @@ GameObject:
   - component: {fileID: 1076813000}
   m_Layer: 6
   m_Name: Cube (1)
-  m_TagString: Untagged
+  m_TagString: Walls
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1280,6 +1280,7 @@ GameObject:
   - component: {fileID: 1162947866}
   - component: {fileID: 1162947865}
   - component: {fileID: 1162947864}
+  - component: {fileID: 1162947868}
   m_Layer: 6
   m_Name: Sphere (2)
   m_TagString: Untagged
@@ -1365,6 +1366,20 @@ Transform:
   m_Father: {fileID: 1975367347}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &1162947868
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1162947863}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.5000001
+  m_Height: 4
+  m_Direction: 1
+  m_Center: {x: -0.0000008940697, y: 0.0000033266842, z: 0.0000003874302}
 --- !u!1001 &1182374657
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1559,7 +1574,7 @@ GameObject:
   - component: {fileID: 1300585414}
   m_Layer: 6
   m_Name: Cube
-  m_TagString: Untagged
+  m_TagString: Walls
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1836,7 +1851,7 @@ GameObject:
   - component: {fileID: 1407965615}
   m_Layer: 6
   m_Name: Cube (4)
-  m_TagString: Untagged
+  m_TagString: Walls
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2223,8 +2238,8 @@ Transform:
   m_Father: {fileID: 1975367347}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!135 &1683378574
-SphereCollider:
+--- !u!136 &1683378574
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -2233,8 +2248,9 @@ SphereCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.5000002
+  m_Height: 4
+  m_Direction: 1
   m_Center: {x: 0.00000005960465, y: 0.0000055991113, z: -0.0000019967556}
 --- !u!1 &1755465035
 GameObject:
@@ -2250,7 +2266,7 @@ GameObject:
   - component: {fileID: 1755465037}
   m_Layer: 6
   m_Name: Cube (9)
-  m_TagString: Untagged
+  m_TagString: Walls
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2395,7 +2411,7 @@ GameObject:
   - component: {fileID: 1772921767}
   m_Layer: 6
   m_Name: Cube (2)
-  m_TagString: Untagged
+  m_TagString: Walls
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2489,7 +2505,7 @@ GameObject:
   - component: {fileID: 1776334035}
   - component: {fileID: 1776334034}
   - component: {fileID: 1776334033}
-  - component: {fileID: 1776334032}
+  - component: {fileID: 1776334036}
   m_Layer: 6
   m_Name: Sphere (3)
   m_TagString: Untagged
@@ -2497,19 +2513,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!135 &1776334032
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1776334031}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &1776334033
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -2575,6 +2578,20 @@ Transform:
   m_Father: {fileID: 1975367347}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &1776334036
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1776334031}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.5000001
+  m_Height: 4
+  m_Direction: 1
+  m_Center: {x: -0.000001847744, y: 0.0000033266842, z: -0.00000008940697}
 --- !u!1 &1794257427
 GameObject:
   m_ObjectHideFlags: 0
@@ -2590,7 +2607,7 @@ GameObject:
   - component: {fileID: 1794257432}
   m_Layer: 6
   m_Name: DoorNorth
-  m_TagString: Untagged
+  m_TagString: Walls
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2852,7 +2869,7 @@ GameObject:
   - component: {fileID: 2067507113}
   m_Layer: 6
   m_Name: DoorSouth
-  m_TagString: Untagged
+  m_TagString: Walls
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

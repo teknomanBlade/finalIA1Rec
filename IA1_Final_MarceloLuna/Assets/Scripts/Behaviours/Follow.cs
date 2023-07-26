@@ -21,7 +21,7 @@ public class Follow : IBehaviour, ISetteableTargetObservable, IObstacleBetweenOb
         _model = model;
         targetSeek = target;
         viewRadius = 3f;
-        separationWeight = 0.75f;
+        separationWeight = 0.65f;
         alignmentWeight = 1f;
         cohesionWeight = 0.25f;
         seekWeight = 0.4f;
@@ -176,9 +176,12 @@ public class Follow : IBehaviour, ISetteableTargetObservable, IObstacleBetweenOb
         if (Physics.Raycast(_model.transform.position, -dirToLeader, out RaycastHit hit, distanceToLeader, _model.ObstaclesLayer)) 
         {
             //Debug.Log("HIT OBSTACLE");
-            Debug.DrawRay(_model.transform.position, dirToLeader, Color.red);
-            TriggerObstacleBetween("HasObstaclesBetween", hit.collider.gameObject);
-            _model.FSM_NPCs.SendInput(BaseModel.NPCInputs.AVOID_OBSTACLES);
+            if (!hit.collider.gameObject.CompareTag("Walls")) 
+            {
+                Debug.DrawRay(_model.transform.position, dirToLeader, Color.red);
+                TriggerObstacleBetween("HasObstaclesBetween", hit.collider.gameObject);
+                _model.FSM_NPCs.SendInput(BaseModel.NPCInputs.AVOID_OBSTACLES);
+            }
         }
 
         return CalculateSteering(desired);
@@ -192,6 +195,9 @@ public class Follow : IBehaviour, ISetteableTargetObservable, IObstacleBetweenOb
     {
         _model.GetNodeByLesserDistance();
         _model.transform.position += _model._velocity * Time.deltaTime;
+        var pos = _model.transform.position;
+        pos.y = Mathf.Clamp(pos.y, 0.17f, 0.17f);
+        _model.transform.position = pos;
         _model.transform.forward = _model._velocity;
         _model.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
     }

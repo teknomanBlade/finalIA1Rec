@@ -18,14 +18,16 @@ public class AvoidObstacles : IBehaviour, IObstacleBetweenObserver
         _model.TargetPosition = _target.transform.position;
         if (!_model.InSight())
         {
+            Debug.Log("NO VE AL LIDER");
             ApplyForce(Seek(_target.transform.position) + ObstacleAvoidance() * _model.avoidWeight);
             Move();
         }
         else
         {
             Debug.Log("VE AL LIDER");
-            ApplyForce(Seek(_target.transform.position));
-            Move();
+            _model.FSM_NPCs.SendInput(BaseModel.NPCInputs.FOLLOW);
+            /*ApplyForce(Seek(_target.transform.position));
+            Move();*/
         }
     }
 
@@ -39,7 +41,7 @@ public class AvoidObstacles : IBehaviour, IObstacleBetweenObserver
         {*/
         if (_obstacle) 
         { 
-            Debug.Log("OBSTACLE: " + _obstacle.name);
+            //Debug.Log("OBSTACLE: " + _obstacle.name);
             Vector3 dirToObject = _obstacle.transform.position - _model.transform.position;
             float angleInBetween = Vector3.SignedAngle(_model.transform.forward, dirToObject, Vector3.up);
 
@@ -74,7 +76,7 @@ public class AvoidObstacles : IBehaviour, IObstacleBetweenObserver
     {
         if (message.Equals("HasObstaclesBetween")) 
         {
-            Debug.Log("SE ENVIO EL OBSTACULO?? " + obstacle.name);
+            //Debug.Log("SE ENVIO EL OBSTACULO?? " + obstacle.name);
             _obstacle = obstacle;
         }
     }
