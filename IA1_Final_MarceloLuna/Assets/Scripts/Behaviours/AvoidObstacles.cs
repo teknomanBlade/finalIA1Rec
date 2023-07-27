@@ -7,10 +7,12 @@ public class AvoidObstacles : IBehaviour, IObstacleBetweenObserver
     private BaseModel _model;
     private BaseModel _target;
     private GameObject _obstacle;
+    public float avoidWeight;
     public AvoidObstacles(BaseModel model, BaseModel target)
     {
         _model = model;
         _target = target;
+        avoidWeight = 6f;
     }
 
     public void ExecuteState()
@@ -19,15 +21,15 @@ public class AvoidObstacles : IBehaviour, IObstacleBetweenObserver
         if (!_model.InSight())
         {
             Debug.Log("NO VE AL LIDER");
-            ApplyForce(Seek(_target.transform.position) + ObstacleAvoidance() * _model.avoidWeight);
+            ApplyForce(Seek(_target.transform.position) + ObstacleAvoidance() * avoidWeight);
             Move();
         }
         else
         {
             Debug.Log("VE AL LIDER");
-            _model.FSM_NPCs.SendInput(BaseModel.NPCInputs.FOLLOW);
-            /*ApplyForce(Seek(_target.transform.position));
-            Move();*/
+            //_model.FSM_NPCs.SendInput(BaseModel.NPCInputs.FOLLOW);
+            ApplyForce(Seek(_target.transform.position));
+            Move();
         }
     }
 
@@ -44,7 +46,6 @@ public class AvoidObstacles : IBehaviour, IObstacleBetweenObserver
             //Debug.Log("OBSTACLE: " + _obstacle.name);
             Vector3 dirToObject = _obstacle.transform.position - _model.transform.position;
             float angleInBetween = Vector3.SignedAngle(_model.transform.forward, dirToObject, Vector3.up);
-
             Vector3 desired = angleInBetween >= 0 ? -_model.transform.right : _model.transform.right; // va a depender de lo que nosotros queremos
             desired.Normalize();
             desired *= _model.maxSpeed;
@@ -58,6 +59,13 @@ public class AvoidObstacles : IBehaviour, IObstacleBetweenObserver
     Vector3 Seek(Vector3 target)
     {
         Vector3 desired = (target - _model.transform.position).normalized * _model.maxSpeed;
+        var distanceToTarget = Vector3.Distance(target, _model.transform.position);
+        //Debug.Log("DISTANCE TO TARGET: " + distanceToTarget);
+        if (distanceToTarget <= 0.5f) 
+        {
+            Debug.Log("ESTA CERCA DEL LIDER...");
+            _model.FSM_NPCs.SendInput(BaseModel.NPCInputs.FOLLOW);
+        }
         Vector3 steering = Vector3.ClampMagnitude(desired - _model._velocity, _model.maxForce / 10);
         return steering;
     }

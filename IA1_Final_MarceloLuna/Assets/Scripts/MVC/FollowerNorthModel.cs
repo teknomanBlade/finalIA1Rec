@@ -16,7 +16,6 @@ public class FollowerNorthModel : BaseModel
         Rank = "Follower";
         Damage = 5.0f;
         AttackDistanceThreshold = 1.5f;
-        avoidWeight = 4f;
         FollowerNorthView = GetComponent<FollowerNorthView>();
         Controller = new FollowerNorthController(this, FollowerNorthView);
         #region EventFSM

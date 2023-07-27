@@ -190,13 +190,14 @@ public class Follow : IBehaviour, ISetteableTargetObservable, IObstacleBetweenOb
     {
         _model._velocity += Vector3.ClampMagnitude(force, _model.maxSpeed);
     }
-
     public void Move() 
     {
         _model.GetNodeByLesserDistance();
         _model.transform.position += _model._velocity * Time.deltaTime;
         var pos = _model.transform.position;
         pos.y = Mathf.Clamp(pos.y, 0.17f, 0.17f);
+        //pos.x = Mathf.Clamp(pos.x, -10.17f, 1.375f);
+        //pos.z = Mathf.Clamp(pos.z, -9.85f, 1.71f);
         _model.transform.position = pos;
         _model.transform.forward = _model._velocity;
         _model.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
@@ -238,7 +239,7 @@ public class Follow : IBehaviour, ISetteableTargetObservable, IObstacleBetweenOb
             }
         }
     }
-
+    
     public void AddObserverSetteableTarget(ISetteableTargetObserver obs)
     {
         _myObserversSetteableTarget.Add(obs);

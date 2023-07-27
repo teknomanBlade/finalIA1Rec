@@ -97,7 +97,7 @@ public class BaseModel : MonoBehaviour, /*IObstacleBetweenObserver,*/ IAttackTar
     public Node currentNode;
     public Node finalNode;
     
-    public float avoidWeight;
+    
     private LeaderInputs _currentLeaderState;
     public LeaderInputs CurrentLeaderState
     {
@@ -115,7 +115,6 @@ public class BaseModel : MonoBehaviour, /*IObstacleBetweenObserver,*/ IAttackTar
     public float arriveRadius;
     public float maxSpeed;
     public float maxForce;
-    public float offsetY;
     public Vector3 _velocity;
     public enum NPCInputs { IDLE,ATTACK, FOLLOW, AVOID_OBSTACLES , DIE, ESCAPE }
     protected EventFSM<NPCInputs> _mFSM_NPCs;
@@ -309,12 +308,6 @@ public class BaseModel : MonoBehaviour, /*IObstacleBetweenObserver,*/ IAttackTar
         finalNode = q.OrderBy(x => rnd.Next()).Take(1).FirstOrDefault();
         TargetPosition = finalNode.transform.position;
     }
-    
-
-    /*public void OnNotifyObstacleBetween(string message, GameObject obstacle)
-    {
-
-    }*/
 
     public void OnNotifyAttackTarget(string message)
     {

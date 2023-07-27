@@ -16,7 +16,6 @@ public class FollowerSouthModel : BaseModel
         Rank = "Follower";
         Damage = 5.0f;
         AttackDistanceThreshold = 1.5f;
-        avoidWeight = 4f;
         FollowerSouthView = GetComponent<FollowerSouthView>();
         Controller = new FollowerSouthController(this, FollowerSouthView);
         #region EventFSM

@@ -125,17 +125,12 @@ MonoBehaviour:
   TargetPosition: {x: 0, y: 0, z: 0}
   currentNode: {fileID: 0}
   finalNode: {fileID: 0}
-  viewRadius: 0
-  separationWeight: 0
-  alignmentWeight: 0
-  cohesionWeight: 0
-  avoidWeight: 0
-  seekWeight: 0
   arriveRadius: 3.5
   maxSpeed: 3
   maxForce: 4
-  offsetY: 0.2012
   _velocity: {x: 0, y: 0, z: 0}
+  _distanceToTarget: 0
+  _attackDistanceThreshold: 0
   ObstaclesBetween: 0
   _npcs: []
 --- !u!114 &-4698444124167983365

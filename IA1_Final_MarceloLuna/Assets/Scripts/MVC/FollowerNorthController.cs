@@ -15,6 +15,7 @@ public class FollowerNorthController : IController
 
     public void OnUpdate()
     {
+        //_model.CheckBounds();
         _model.UpdateFSM_NPCs();
     }
 }
