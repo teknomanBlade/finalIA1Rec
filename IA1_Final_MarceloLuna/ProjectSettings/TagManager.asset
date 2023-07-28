@@ -11,6 +11,7 @@ TagManager:
   - DoorNorth
   - DoorSouth
   - Walls
+  - LimitWalls
   layers:
   - Default
   - TransparentFX

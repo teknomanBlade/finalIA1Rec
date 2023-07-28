@@ -5,7 +5,7 @@ using UnityEngine;
 public class Escape : IBehaviour
 {
     private BaseModel _model;
-    int index = 0;
+    public int index = 0;
     public Escape(BaseModel model)
     {
         _model = model;

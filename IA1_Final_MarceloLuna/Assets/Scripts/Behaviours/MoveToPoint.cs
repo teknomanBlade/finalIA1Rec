@@ -9,7 +9,7 @@ public class MoveToPoint : IBehaviour, ISetteableTargetObservable, IObstacleBetw
     List<IObstacleBetweenObserver> _myObserversObstacleBetween = new List<IObstacleBetweenObserver>();
     List<IAttackTargetObserver> _myObserversAttackTarget = new List<IAttackTargetObserver>();
     private BaseModel _model;
-    int index = 0;
+    public int index = 0;
     public MoveToPoint(BaseModel model)
     {
         _model = model;

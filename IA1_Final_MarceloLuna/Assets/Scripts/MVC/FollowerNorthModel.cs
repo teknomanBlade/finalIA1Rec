@@ -85,7 +85,7 @@ public class FollowerNorthModel : BaseModel
             //OnStateChanged((int)CurrentState);
             CurrentNPCState = NPCInputs.IDLE;
             currentBehaviour = previousMovementBehaviour;
-            Debug.Log("START IDLE...");
+            //Debug.Log("START IDLE...");
         };
 
         idle.OnUpdate += () =>
@@ -95,7 +95,7 @@ public class FollowerNorthModel : BaseModel
 
         idle.OnExit -= x =>
         {
-            Debug.Log("END IDLE...");
+            //Debug.Log("END IDLE...");
         };
 
         follow.OnEnter += x =>
@@ -103,8 +103,9 @@ public class FollowerNorthModel : BaseModel
             //CurrentState = NPCInputs.IDLE;
             //OnStateChanged((int)CurrentState);
             CurrentNPCState = NPCInputs.FOLLOW;
+            followBehaviour.index = 0;
             currentBehaviour = followBehaviour;
-            Debug.Log("START FOLLOW...");
+            //Debug.Log("START FOLLOW...");
         };
 
         follow.OnUpdate += () =>
@@ -114,7 +115,7 @@ public class FollowerNorthModel : BaseModel
 
         follow.OnExit -= x =>
         {
-            Debug.Log("END FOLLOW...");
+            //Debug.Log("END FOLLOW...");
         };
 
         avoidObstacles.OnEnter += x =>
@@ -122,8 +123,9 @@ public class FollowerNorthModel : BaseModel
             //CurrentState = NPCInputs.IDLE;
             //OnStateChanged((int)CurrentState);
             CurrentNPCState = NPCInputs.AVOID_OBSTACLES;
+            avoidObstaclesBehaviour.index = 0; 
             currentBehaviour = avoidObstaclesBehaviour;
-            Debug.Log("START AVOID OBSTACLES...");
+            //Debug.Log("START AVOID OBSTACLES...");
         };
 
         avoidObstacles.OnUpdate += () =>
@@ -133,7 +135,7 @@ public class FollowerNorthModel : BaseModel
 
         avoidObstacles.OnExit -= x =>
         {
-            Debug.Log("END AVOID OBSTACLES...");
+            //Debug.Log("END AVOID OBSTACLES...");
         };
 
         attack.OnEnter += x =>
@@ -141,7 +143,7 @@ public class FollowerNorthModel : BaseModel
             CurrentNPCState = NPCInputs.ATTACK;
             //OnStateChanged((int)CurrentState);
             currentBehaviour = attackBehaviour;
-            Debug.Log("START ATTACK...");
+            //Debug.Log("START ATTACK...");
         };
 
         attack.OnUpdate += () =>
@@ -151,7 +153,7 @@ public class FollowerNorthModel : BaseModel
 
         attack.OnExit -= x =>
         {
-            Debug.Log("END ATTACK...");
+            //Debug.Log("END ATTACK...");
         };
 
         escape.OnEnter += x =>
@@ -159,8 +161,9 @@ public class FollowerNorthModel : BaseModel
             CurrentNPCState = NPCInputs.ESCAPE;
             //OnStateChanged((int)CurrentState);
             currentBehaviour = escapeBehaviour;
+            escapeBehaviour.index = 0;
             GetNodeFinalFromCornersList();
-            Debug.Log("START MOVE TO POINT...");
+            //Debug.Log("START MOVE TO POINT...");
         };
 
         escape.OnUpdate += () =>
@@ -170,7 +173,7 @@ public class FollowerNorthModel : BaseModel
 
         escape.OnExit -= x =>
         {
-            Debug.Log("END MOVE TO POINT...");
+            //Debug.Log("END MOVE TO POINT...");
         };
 
         die.OnEnter += x =>
@@ -178,7 +181,7 @@ public class FollowerNorthModel : BaseModel
             CurrentNPCState = NPCInputs.DIE;
             //OnStateChanged((int)CurrentState);
             currentBehaviour = dieBehaviour;
-            Debug.Log("START DIE...");
+            //Debug.Log("START DIE...");
         };
 
         die.OnUpdate += () =>
@@ -188,13 +191,13 @@ public class FollowerNorthModel : BaseModel
 
         die.OnExit -= x =>
         {
-            Debug.Log("END DIE...");
+            //Debug.Log("END DIE...");
         };
 
         follow.GetTransition(NPCInputs.ATTACK).OnTransition += x =>
         {
             //CurrentState = NPCInputs.ATTACK;
-            Debug.Log("TRANSITION FOLLOW TO ATTACK...");
+            //Debug.Log("TRANSITION FOLLOW TO ATTACK...");
             //OnStateChanged((int)CurrentState);
         };
 

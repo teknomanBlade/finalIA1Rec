@@ -55,7 +55,8 @@ public class LeaderNorthModel : BaseModel
         {
             CurrentLeaderState = LeaderInputs.MOVE_TO_POINT;
             //OnStateChanged((int)CurrentState);
-            currentBehaviour = previousMovementBehaviour;
+            moveToPointBehaviour.index = 0;
+            currentBehaviour = moveToPointBehaviour;
             Debug.Log("START MOVE TO POINT...");
         };
 
@@ -89,6 +90,7 @@ public class LeaderNorthModel : BaseModel
         escape.OnEnter += x =>
         {
             CurrentLeaderState = LeaderInputs.ESCAPE;
+            escapeBehaviour.index = 0;
             currentBehaviour = escapeBehaviour;
             GetNodeFinalFromCornersList();
             Debug.Log("START ESCAPE...");

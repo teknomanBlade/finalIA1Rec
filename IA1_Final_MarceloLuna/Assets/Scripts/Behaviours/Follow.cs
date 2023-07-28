@@ -10,7 +10,7 @@ public class Follow : IBehaviour, ISetteableTargetObservable, IObstacleBetweenOb
     List<IAttackTargetObserver> _myObserversAttackTarget = new List<IAttackTargetObserver>();
     private BaseModel _model;
     public BaseModel targetSeek;
-    int index = 0;
+    public int index = 0;
     public float viewRadius;
     public float separationWeight;
     public float alignmentWeight;
@@ -37,10 +37,13 @@ public class Follow : IBehaviour, ISetteableTargetObservable, IObstacleBetweenOb
     
     public void ExecuteState()
     {
+        Debug.Log("EXECUTE FOLLOW...");
         _model.TargetPosition = targetSeek.transform.position;
+        _model.finalNode = targetSeek.finalNode;
         DetectPlayer(_model.Faction);
         if (_model.InSight())
         {
+            Debug.Log("VE AL LIDER - FOLLOW");
             AddForce(
                      Separation() * separationWeight +
                      Alignment() * alignmentWeight +
@@ -51,13 +54,14 @@ public class Follow : IBehaviour, ISetteableTargetObservable, IObstacleBetweenOb
         }
         else 
         {
-            TravelPath(_model.GetPath(_model.currentNode, targetSeek.finalNode));
+            Debug.Log("NO VE AL LIDER - FOLLOW");
+            TravelPath(_model.GetPath(_model.currentNode, _model.finalNode));
         }
-        
     }
 
     public void TravelPath(List<Node> path)
     {
+        Debug.Log("INDEX: " + index);
         if (path == null || path.Count <= 0 || index >= path.Count) return;
 
         Vector3 dir = path[index].transform.position - _model.transform.position;
@@ -176,7 +180,7 @@ public class Follow : IBehaviour, ISetteableTargetObservable, IObstacleBetweenOb
         if (Physics.Raycast(_model.transform.position, -dirToLeader, out RaycastHit hit, distanceToLeader, _model.ObstaclesLayer)) 
         {
             //Debug.Log("HIT OBSTACLE");
-            if (!hit.collider.gameObject.CompareTag("Walls")) 
+            if (!hit.collider.gameObject.CompareTag("LimitWalls")) 
             {
                 Debug.DrawRay(_model.transform.position, dirToLeader, Color.red);
                 TriggerObstacleBetween("HasObstaclesBetween", hit.collider.gameObject);

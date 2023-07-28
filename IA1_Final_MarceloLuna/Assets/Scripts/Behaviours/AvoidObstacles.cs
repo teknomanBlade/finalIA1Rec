@@ -8,6 +8,7 @@ public class AvoidObstacles : IBehaviour, IObstacleBetweenObserver
     private BaseModel _target;
     private GameObject _obstacle;
     public float avoidWeight;
+    public int index = 0;
     public AvoidObstacles(BaseModel model, BaseModel target)
     {
         _model = model;
@@ -17,22 +18,47 @@ public class AvoidObstacles : IBehaviour, IObstacleBetweenObserver
 
     public void ExecuteState()
     {
+        Debug.Log("EXECUTE AVOID...");
         _model.TargetPosition = _target.transform.position;
+        _model.finalNode = _target.finalNode;
         if (!_model.InSight())
         {
-            Debug.Log("NO VE AL LIDER");
-            ApplyForce(Seek(_target.transform.position) + ObstacleAvoidance() * avoidWeight);
-            Move();
+            Debug.Log("NO VE AL LIDER - AVOID");
+            if (_obstacle.CompareTag("Walls"))
+            {
+                TravelPath(_model.GetPath(_model.currentNode, _model.finalNode));
+            }
+            else 
+            {
+                ApplyForce(Seek(_target.transform.position) + ObstacleAvoidance() * avoidWeight);
+                Move();
+            }
         }
         else
         {
-            Debug.Log("VE AL LIDER");
-            //_model.FSM_NPCs.SendInput(BaseModel.NPCInputs.FOLLOW);
+            Debug.Log("VE AL LIDER - AVOID");
             ApplyForce(Seek(_target.transform.position));
             Move();
         }
     }
+    public void TravelPath(List<Node> path)
+    {
+        if (path == null || path.Count <= 0 || index >= path.Count) return;
 
+        Vector3 dir = path[index].transform.position - _model.transform.position;
+
+        Move(dir);
+
+        if (dir.magnitude < 0.1f)
+        {
+            index = index >= path.Count - 1 ? 0 : index + 1;
+        }
+    }
+    public void Move(Vector3 dir)
+    {
+        float speed = _model.maxSpeed;
+        _model.transform.position += speed * Time.deltaTime * dir.normalized;
+    }
     Vector3 ObstacleAvoidance()
     {
         /*Vector3 pos = _model.transform.position;
@@ -43,7 +69,7 @@ public class AvoidObstacles : IBehaviour, IObstacleBetweenObserver
         {*/
         if (_obstacle) 
         { 
-            //Debug.Log("OBSTACLE: " + _obstacle.name);
+            Debug.Log("OBSTACLE: " + _obstacle.name);
             Vector3 dirToObject = _obstacle.transform.position - _model.transform.position;
             float angleInBetween = Vector3.SignedAngle(_model.transform.forward, dirToObject, Vector3.up);
             Vector3 desired = angleInBetween >= 0 ? -_model.transform.right : _model.transform.right; // va a depender de lo que nosotros queremos
