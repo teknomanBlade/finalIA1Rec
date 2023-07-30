@@ -103,7 +103,7 @@ public class FollowerNorthModel : BaseModel
             //CurrentState = NPCInputs.IDLE;
             //OnStateChanged((int)CurrentState);
             CurrentNPCState = NPCInputs.FOLLOW;
-            followBehaviour.index = 0;
+            //followBehaviour.SetPath();
             currentBehaviour = followBehaviour;
             //Debug.Log("START FOLLOW...");
         };

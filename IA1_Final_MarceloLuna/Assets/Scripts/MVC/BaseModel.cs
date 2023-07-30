@@ -267,6 +267,7 @@ public class BaseModel : MonoBehaviour, /*IObstacleBetweenObserver,*/ IAttackTar
     {
         return GameManager.instance.InSight(transform.position, TargetPosition);
     }
+  
     public void GetNodeByLesserDistance()
     {
         StartCoroutine(NodeByLesserDistance());

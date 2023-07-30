@@ -16,6 +16,7 @@ public class Follow : IBehaviour, ISetteableTargetObservable, IObstacleBetweenOb
     public float alignmentWeight;
     public float cohesionWeight;
     public float seekWeight;
+    public List<Node> pathToFollow;
     public Follow(BaseModel model, BaseModel target)
     {
         _model = model;
@@ -25,6 +26,13 @@ public class Follow : IBehaviour, ISetteableTargetObservable, IObstacleBetweenOb
         alignmentWeight = 1f;
         cohesionWeight = 0.25f;
         seekWeight = 0.4f;
+    }
+
+    public void SetPath() 
+    {
+        _model.TargetPosition = targetSeek.transform.position;
+        _model.finalNode = targetSeek.finalNode;
+        pathToFollow = _model.GetPath(_model.currentNode, _model.finalNode);
     }
 
     public bool ChooseByNameAndFaction(BaseModel npc) 
@@ -38,8 +46,7 @@ public class Follow : IBehaviour, ISetteableTargetObservable, IObstacleBetweenOb
     public void ExecuteState()
     {
         Debug.Log("EXECUTE FOLLOW...");
-        _model.TargetPosition = targetSeek.transform.position;
-        _model.finalNode = targetSeek.finalNode;
+        SetPath();
         DetectPlayer(_model.Faction);
         if (_model.InSight())
         {
@@ -55,15 +62,22 @@ public class Follow : IBehaviour, ISetteableTargetObservable, IObstacleBetweenOb
         else 
         {
             Debug.Log("NO VE AL LIDER - FOLLOW");
-            TravelPath(_model.GetPath(_model.currentNode, _model.finalNode));
+            TravelPath(pathToFollow);
         }
     }
 
     public void TravelPath(List<Node> path)
     {
-        Debug.Log("INDEX: " + index);
-        if (path == null || path.Count <= 0 || index >= path.Count) return;
-
+        //Debug.Log("INDEX: " + index + " - " + " PATH COUNT: "+ path.Count);
+        if (path == null || path.Count <= 0) return;
+        if (index > path.Count - 1)
+        {
+            Debug.Log("VUELVE EL INDEX EN 0 - ANTES: "+ index);
+            //pathToFollow.Clear();
+            index = 0;
+            Debug.Log("VUELVE EL INDEX EN 0 - DESPUES: " + index);
+        }
+        Debug.Log("INDEX: " + index + " - " + " PATH COUNT: " + path.Count);
         Vector3 dir = path[index].transform.position - _model.transform.position;
 
         Move(dir);
@@ -71,6 +85,7 @@ public class Follow : IBehaviour, ISetteableTargetObservable, IObstacleBetweenOb
         if (dir.magnitude < 0.1f)
         {
             index = index >= path.Count - 1 ? 0 : index + 1;
+            //index++;
         }
     }
 

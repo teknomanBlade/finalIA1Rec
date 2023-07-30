@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Escape : IBehaviour
@@ -13,6 +14,22 @@ public class Escape : IBehaviour
 
     public void ExecuteState()
     {
+        Vector3 dirFinal = _model.finalNode.transform.position - _model.transform.position;
+        //Debug.Log("FINAL NODE DISTANCE: " + dirFinal.magnitude);
+        //Debug.DrawRay(_model.transform.position, dirFinal, Color.green);
+        if (dirFinal.magnitude < 0.1f)
+        {
+            _model.HP = _model.MaxHP;
+            if (_model.Rank.Equals("Leader"))
+            {
+                _model.FSMLeaders.SendInput(BaseModel.LeaderInputs.MOVE_TO_POINT);
+            }
+            else
+            {
+                _model.FSM_NPCs.SendInput(BaseModel.NPCInputs.FOLLOW);
+            }
+        }
+
         if (_model.InSight())
         {
             Arrive();
@@ -27,7 +44,9 @@ public class Escape : IBehaviour
     public void TravelPath(List<Node> path)
     {
         if (path == null || path.Count <= 0 || index >= path.Count) return;
-
+        //var last = path.TakeLast(1).FirstOrDefault();
+        //Debug.Log("LAST PATH NODE: " + last.name);
+        
         Vector3 dir = path[index].transform.position - _model.transform.position;
 
         Move(dir);

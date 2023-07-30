@@ -55,7 +55,7 @@ public class LeaderSouthModel : BaseModel
         {
             CurrentLeaderState = LeaderInputs.MOVE_TO_POINT;
             //OnStateChanged((int)CurrentState);
-            moveToPointBehaviour.index = 0;
+            //moveToPointBehaviour.SetPath();
             currentBehaviour = moveToPointBehaviour;
             Debug.Log("START MOVE TO POINT...");
         };

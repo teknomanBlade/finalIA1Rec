@@ -9,17 +9,22 @@ public class MoveToPoint : IBehaviour, ISetteableTargetObservable, IObstacleBetw
     List<IObstacleBetweenObserver> _myObserversObstacleBetween = new List<IObstacleBetweenObserver>();
     List<IAttackTargetObserver> _myObserversAttackTarget = new List<IAttackTargetObserver>();
     private BaseModel _model;
+    public List<Node> pathToFollow;
     public int index = 0;
     public MoveToPoint(BaseModel model)
     {
         _model = model;
         AddObserverAttackTarget(_model);
     }
-
+    public void SetPath()
+    {
+        _model.GetNodeFinalByLesserDistance(_model.TargetPosition);
+        pathToFollow = _model.GetPath(_model.currentNode, _model.finalNode);
+    }
     public void ExecuteState()
     {
         #region User Movement Leader
-        _model.GetNodeFinalByLesserDistance(_model.TargetPosition);
+        SetPath();
         DetectPlayer(_model.Faction);
         if (_model.InSight())
         {
@@ -28,14 +33,20 @@ public class MoveToPoint : IBehaviour, ISetteableTargetObservable, IObstacleBetw
         }
         else 
         {
-            TravelPath(_model.GetPath(_model.currentNode, _model.finalNode));
+            TravelPath(pathToFollow);
         }
         #endregion
     }
     public void TravelPath(List<Node> path) 
     {
-        if(path == null || path.Count <= 0 || index >= path.Count) return;
-
+        if(path == null || path.Count <= 0 /*|| index >= path.Count*/) return;
+        if (index > path.Count - 1)
+        {
+            Debug.Log("VUELVE EL INDEX EN 0 - ANTES: " + index);
+            //pathToFollow.Clear();
+            index = 0;
+            Debug.Log("VUELVE EL INDEX EN 0 - DESPUES: " + index);
+        }
         Vector3 dir = path[index].transform.position - _model.transform.position;
 
         Move(dir);
@@ -43,6 +54,12 @@ public class MoveToPoint : IBehaviour, ISetteableTargetObservable, IObstacleBetw
         if (dir.magnitude < 0.1f)
         {
             index = index >= path.Count - 1 ? 0 : index + 1;
+            /*index++;
+            if (index > pathToFollow.Count - 1)
+            {
+                pathToFollow.Clear();
+                index = 0;
+            }*/
         }
     }
 
