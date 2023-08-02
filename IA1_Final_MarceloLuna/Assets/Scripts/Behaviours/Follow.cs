@@ -72,12 +72,12 @@ public class Follow : IBehaviour, ISetteableTargetObservable, IObstacleBetweenOb
         if (path == null || path.Count <= 0) return;
         if (index > path.Count - 1)
         {
-            Debug.Log("VUELVE EL INDEX EN 0 - ANTES: "+ index);
+            //Debug.Log("VUELVE EL INDEX EN 0 - ANTES: "+ index);
             //pathToFollow.Clear();
             index = 0;
-            Debug.Log("VUELVE EL INDEX EN 0 - DESPUES: " + index);
+            //Debug.Log("VUELVE EL INDEX EN 0 - DESPUES: " + index);
         }
-        Debug.Log("INDEX: " + index + " - " + " PATH COUNT: " + path.Count);
+        //Debug.Log("INDEX: " + index + " - " + " PATH COUNT: " + path.Count);
         Vector3 dir = path[index].transform.position - _model.transform.position;
 
         Move(dir);

@@ -13,6 +13,10 @@ public class GameManager : MonoBehaviour
     public AStar aStar;
     public ThetaStar thetaStar;
     public NodeGrid grid;
+    public GameObject NorthWall;
+    public GameObject SouthWall;
+    public GameObject EastWall;
+    public GameObject WestWall;
 
     public LayerMask wallMask;
     private void Awake()
@@ -21,6 +25,10 @@ public class GameManager : MonoBehaviour
         else Destroy(gameObject);
         aStar = new AStar();
         thetaStar = new ThetaStar();
+        Debug.Log("NORTH WALL POS: " + NorthWall.transform.position);
+        Debug.Log("SOUTH WALL POS: " + SouthWall.transform.position);
+        Debug.Log("EAST WALL POS: " + EastWall.transform.position);
+        Debug.Log("WEST WALL POS: " + WestWall.transform.position);
     }
 
     // Update is called once per frame

@@ -23,28 +23,37 @@ public class AvoidObstacles : IBehaviour, IObstacleBetweenObserver
         _model.finalNode = _target.finalNode;
         if (!_model.InSight())
         {
-            Debug.Log("NO VE AL LIDER - AVOID");
+            //Debug.Log("NO VE AL LIDER - AVOID");
             if (_obstacle.CompareTag("Walls"))
             {
+                Debug.Log("THETA STAR...");
                 TravelPath(_model.GetPath(_model.currentNode, _model.finalNode));
             }
             else 
             {
+                Debug.Log("AVOIDANCE...");
                 ApplyForce(Seek(_target.transform.position) + ObstacleAvoidance() * avoidWeight);
                 Move();
             }
         }
         else
         {
-            Debug.Log("VE AL LIDER - AVOID");
+            //Debug.Log("VE AL LIDER - AVOID");
             ApplyForce(Seek(_target.transform.position));
             Move();
         }
     }
     public void TravelPath(List<Node> path)
     {
-        if (path == null || path.Count <= 0 || index >= path.Count) return;
+        if (path == null || path.Count <= 0 /*|| index >= path.Count*/) return;
 
+        if (index > path.Count - 1)
+        {
+            //Debug.Log("VUELVE EL INDEX EN 0 - ANTES: "+ index);
+            //pathToFollow.Clear();
+            index = 0;
+            //Debug.Log("VUELVE EL INDEX EN 0 - DESPUES: " + index);
+        }
         Vector3 dir = path[index].transform.position - _model.transform.position;
 
         Move(dir);

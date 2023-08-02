@@ -1981,6 +1981,10 @@ MonoBehaviour:
   AllNodes: []
   CornerNodes: []
   grid: {fileID: 1762290472}
+  NorthWall: {fileID: 1576358073}
+  SouthWall: {fileID: 2127124442}
+  EastWall: {fileID: 2010511209}
+  WestWall: {fileID: 1112169507}
   wallMask:
     serializedVersion: 2
     m_Bits: 64

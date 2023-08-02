@@ -14,6 +14,7 @@ public class Idle : IBehaviour
 
     public void ExecuteState()
     {
+        Debug.Log("EXECUTE IDLE...");
         _model._velocity = Vector3.zero;
         if (_target._velocity != Vector3.zero)
         {

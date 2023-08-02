@@ -327,7 +327,17 @@ public class BaseModel : MonoBehaviour, /*IObstacleBetweenObserver,*/ IAttackTar
             }
         }
     }
+    public void CheckBounds()
+    {
+        Vector3 newPosition = transform.position;
 
+        if (transform.position.z > 12) newPosition.z = transform.position.z - 0.5f;
+        if (transform.position.z < -0.2) newPosition.z = transform.position.z + 0.5f;
+        if (transform.position.x > 12) newPosition.x = transform.position.x - 0.5f;
+        if (transform.position.x < -12) newPosition.x = transform.position.x + 0.5f;
+
+        transform.position = newPosition;
+    }
     /*public void OnNotifyDamageTarget(string message, float damage)
     {
         if (message.Equals("IsDamaging")) 
